@@ -105,6 +105,16 @@
       </div>
     </div>
   </div>
+  {% elif user.role == 'admin' or user.role == 'superadmin' %}
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">Панель администратора</div>
+      <div class="card-body">
+        <p>Вы вошли как администратор.</p>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-primary">Перейти в панель управления</a>
+      </div>
+    </div>
+  </div>
   {% endif %}
 </div>
 

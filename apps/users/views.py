@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.conf import settings
@@ -100,6 +100,20 @@ def profile(request):
         context['relation'] = user.manager_relation
         context['manager_confirmed'] = user.manager_relation.confirmed
         context['manager'] = user.manager_relation.manager
+    elif user.role in ('admin', 'superadmin'):
+        return redirect('admin_dashboard')
     return render(request, 'users/profile.html', context)
+
+def is_admin(user):
+    return user.role in ['admin', 'superadmin']
+
+@login_required
+@user_passes_test
+def admin_dashboard(request):
+
+    context = {
+        'is_superadmin': request.user.role == 'superadmin',
+    }
+    return render(request, 'users/admin_dashboard.html', context)
 
 

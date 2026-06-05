@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Панель администратора — Плюс Клуб{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <h2>Панель администратора</h2>
+    <p class="lead">Управление системой лояльности</p>
+    <hr class="border-warning">
+  </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  <!-- Менеджеры -->
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-header bg-primary text-dark">Менеджеры</div>
+      <div class="card-body">
+        <p>Управление менеджерами: создание, редактирование, удаление.</p>
+        <a href="#" class="btn btn-outline-primary">Открыть</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Задания -->
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-header bg-primary text-dark">Задания</div>
+      <div class="card-body">
+        <p>Создание и проверка заданий для пользователей.</p>
+        <a href="#" class="btn btn-outline-primary">Открыть</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Акции -->
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-header bg-primary text-dark">Акции</div>
+      <div class="card-body">
+        <p>Управление акциями и специальными предложениями.</p>
+        <a href="#" class="btn btn-outline-primary">Открыть</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Товары -->
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-header bg-primary text-dark">Товары</div>
+      <div class="card-body">
+        <p>Карточки товаров для интернет-магазина.</p>
+        <a href="#" class="btn btn-outline-primary">Открыть</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Плюс Коины (ручное начисление) -->
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-header bg-primary text-dark">Плюс Коины</div>
+      <div class="card-body">
+        <p>Начисление и списание коинов у пользователей.</p>
+        <a href="#" class="btn btn-outline-primary">Открыть</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- История покупок (общий просмотр) -->
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-header bg-primary text-dark">История покупок</div>
+      <div class="card-body">
+        <p>Просмотр покупок всех клиентов.</p>
+        <a href="#" class="btn btn-outline-primary">Открыть</a>
+      </div>
+    </div>
+  </div>
+
+  {% if is_superadmin %}
+  <!-- Управление администраторами (только для суперадмина) -->
+  <div class="col">
+    <div class="card h-100 border-warning">
+      <div class="card-header bg-warning text-dark">Администраторы (суперадмин)</div>
+      <div class="card-body">
+        <p>Создание и удаление администраторов системы.</p>
+        <a href="#" class="btn btn-outline-dark">Управлять</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

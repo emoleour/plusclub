@@ -76,3 +76,24 @@ class UserLoginForm(AuthenticationForm):
             'placeholder': 'Введите пароль'
         })
     )
+
+class ManagerForm(forms.ModelForm):
+    password1 = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False,
+        help_text='Оставьте поле пустым, если не хотите менять пароль.'
+    )
+    password2 = forms.CharField(
+        label='Подтверждение пароля',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False
+    )
+    class Meta:
+        model = User
+        fieds = ['email', 'first_name', 'last_name', 'patronymic', 'phone', 'is_active']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
