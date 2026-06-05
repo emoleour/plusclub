@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Профиль монтажника — Плюс Клуб{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">Информация о монтажнике</div>
+      <div class="card-body">
+        <p><strong>ФИО:</strong> {{ installer.last_name }} {{ installer.first_name }} {{ installer.patronymic|default:"" }}</p>
+        <p><strong>Email:</strong> {{ installer.email }}</p>
+        <p><strong>Телефон:</strong> {{ installer.phone }}</p>
+        <p><strong>Статус:</strong> {% if relation.confirmed %}Подтверждён{% else %}Не подтверждён{% endif %}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">История покупок</div>
+      <div class="card-body">
+        <p class="text-muted">Здесь будет история покупок (пока нет данных).</p>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="{% url 'manager_dashboard' %}" class="btn btn-secondary mt-3">Назад к списку</a>
+{% endblock %}

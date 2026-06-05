@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Мои монтажники — Плюс Клуб{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <h2>Панель менеджера</h2>
+    <p class="lead">Управление монтажниками</p>
+    <hr class="border-warning">
+  </div>
+</div>
+
+<!-- Ожидают подтверждения -->
+<div class="card mb-4">
+  <div class="card-header bg-warning text-dark">Ожидают подтверждения ({{ pending|length }})</div>
+  <div class="card-body">
+    {% if pending %}
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ФИО</th>
+              <th>Email</th>
+              <th>Телефон</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for relation in pending %}
+              <tr>
+                <td>{{ relation.installer.last_name }} {{ relation.installer.first_name }} {{ relation.installer.patronymic|default:"" }}</td>
+                <td>{{ relation.installer.email }}</td>
+                <td>{{ relation.installer.phone }}</td>
+                <td>
+                  <form method="post" action="{% url 'manager_confirm' relation.pk %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-sm">Подтвердить</button>
+                  </form>
+                  <form method="post" action="{% url 'manager_reject' relation.pk %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Отклонить</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted">Нет монтажников, ожидающих подтверждения.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Подтверждённые монтажники -->
+<div class="card">
+  <div class="card-header bg-success text-white">Подтверждённые монтажники ({{ confirmed|length }})</div>
+  <div class="card-body">
+    {% if confirmed %}
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ФИО</th>
+              <th>Email</th>
+              <th>Телефон</th>
+              <th>Подтверждён</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for relation in confirmed %}
+              <tr>
+                <td>{{ relation.installer.last_name }} {{ relation.installer.first_name }} {{ relation.installer.patronymic|default:"" }}</td>
+                <td>{{ relation.installer.email }}</td>
+                <td>{{ relation.installer.phone }}</td>
+                <td>{{ relation.confirmed_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                  <a href="{% url 'installer_detail' relation.installer.pk %}" class="btn btn-outline-primary btn-sm">Профиль</a>
+                  <form method="post" action="{% url 'manager_reject' relation.pk %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Удалить</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted">Пока нет подтверждённых монтажников.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

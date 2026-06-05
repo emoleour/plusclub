@@ -1,0 +1,237 @@
+/* === Основные переменные (переопределение Bootstrap) === */
+:root {
+  --bs-primary: #FFC107;
+  --bs-primary-rgb: 255, 193, 7;
+  --bs-secondary: #6C757D;
+  --bs-secondary-rgb: 108, 117, 125;
+  --bs-dark: #1E1E1E;
+  --bs-dark-rgb: 30, 30, 30;
+  --bs-body-bg: #2B2B2B;
+  --bs-body-color: #E0E0E0;
+  --bs-border-color: #444444;
+  --bs-link-color: #FFC107;
+  --bs-link-hover-color: #E0A800;
+  --bs-card-bg: #2B2B2B;
+  --bs-card-border-color: #444444;
+}
+
+/* === Общие стили === */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Ссылки */
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* === Навигация === */
+.navbar {
+  background-color: var(--bs-dark) !important;
+  border-bottom: 2px solid var(--bs-primary) !important;
+}
+.navbar-brand {
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+}
+
+/* === Кнопки === */
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: #1E1E1E;
+  font-weight: 500;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #E0A800;
+  border-color: #D39E00;
+  color: #1E1E1E;
+}
+.btn-outline-primary {
+  color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+.btn-outline-primary:hover {
+  background-color: var(--bs-primary);
+  color: #1E1E1E;
+}
+
+/* === Карточки (для акций, заданий, вознаграждений) === */
+.card {
+  background-color: var(--bs-card-bg);
+  border: 1px solid var(--bs-card-border-color);
+  border-radius: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.15);
+}
+.card-header {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-bottom: 1px solid var(--bs-border-color);
+  font-weight: 600;
+}
+
+/* === Прогресс-бар дисконтной карты === */
+.progress {
+  background-color: #3A3A3A;
+  border-radius: 1rem;
+  height: 1.5rem;
+}
+.progress-bar {
+  background-color: var(--bs-primary);
+  color: #1E1E1E;
+  font-weight: bold;
+  border-radius: 1rem;
+  transition: width 0.6s ease;
+}
+
+/* === Дисконтная карта (визуализация) === */
+.discount-card {
+  background: linear-gradient(145deg, #1E1E1E, #2B2B2B);
+  border: 1px solid var(--bs-primary);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.1);
+}
+
+/* === QR-коды монтажника === */
+.qr-codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+.qr-item {
+  background-color: #1E1E1E;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  width: 140px;
+}
+.qr-item img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* === Рейтинг (таблица лидеров) === */
+.rating-list {
+  list-style: none;
+  padding-left: 0;
+}
+.rating-list li {
+  background-color: #1E1E1E;
+  border-left: 4px solid var(--bs-primary);
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rating-list li.top {
+  border-left-color: #FFD700;
+  background-color: #2A2A1E;
+}
+
+/* === Таблицы (история покупок, список монтажников) === */
+.table {
+  color: var(--bs-body-color);
+}
+.table thead th {
+  border-bottom: 2px solid var(--bs-primary);
+  color: var(--bs-primary);
+}
+.table td, .table th {
+  border-color: var(--bs-border-color);
+}
+
+/* === Формы === */
+.form-control, .form-select {
+  background-color: #1E1E1E;
+  border: 1px solid var(--bs-border-color);
+  color: #E0E0E0;
+}
+.form-control:focus, .form-select:focus {
+  background-color: #1E1E1E;
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+  color: #fff;
+}
+.form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* === Уведомления (alert) === */
+.alert-success {
+  background-color: #1B3A1B;
+  border-color: #28A745;
+  color: #D4EDDA;
+}
+.alert-error, .alert-danger {
+  background-color: #3A1B1B;
+  border-color: #DC3545;
+  color: #F8D7DA;
+}
+.alert-warning {
+  background-color: #3A3A1B;
+  border-color: var(--bs-primary);
+  color: #FFF3CD;
+}
+.alert-info {
+  background-color: #1B2A3A;
+  border-color: #17A2B8;
+  color: #D1ECF1;
+}
+
+/* === Подвал === */
+.footer {
+  background-color: #1E1E1E !important;
+  border-top: 2px solid var(--bs-primary) !important;
+}
+
+/* === Адаптивные улучшения === */
+@media (max-width: 576px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+  .qr-item {
+    width: 100px;
+  }
+}
+
+/* === Стили для страницы выбора менеджера === */
+.manager-select-card {
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+/* === Кнопка "Помощь" (будет в углу) === */
+.help-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--bs-primary);
+  color: #1E1E1E;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  z-index: 1000;
+  transition: background-color 0.2s;
+}
+.help-button:hover {
+  background-color: #E0A800;
+  color: #1E1E1E;
+}
