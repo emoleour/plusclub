@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'apps.users',
     'apps.crm',
+    'apps.loyalty',
+    'apps.tasks',
 ]
 
 AUTH_USER_MODEL = 'users.User'

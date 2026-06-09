@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Удаление задания — Плюс Клуб{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card border-danger">
+      <div class="card-header bg-danger text-white">Подтверждение удаления</div>
+      <div class="card-body">
+        <p>Вы уверены, что хотите удалить задание <strong>"{{ task.title }}"</strong>?</p>
+        <p class="text-danger">Это действие нельзя отменить.</p>
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Удалить</button>
+          <a href="{% url 'task_manage_list' %}" class="btn btn-secondary">Отмена</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

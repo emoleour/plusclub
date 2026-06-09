@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Мои отклики — Плюс Клуб{% endblock %}
+
+{% block content %}
+<h2>Мои отклики</h2>
+<hr class="border-warning">
+
+{% if submissions %}
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Задание</th>
+          <th>Дата выполнения</th>
+          <th>Статус</th>
+          <th>Награда</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sub in submissions %}
+          <tr>
+            <td>{{ sub.task.title }}</td>
+            <td>{{ sub.created_at|date:"d.m.Y H:i" }}</td>
+            <td>
+              {% if sub.status == 'approved' %}
+                <span class="badge bg-success">Одобрено</span>
+              {% elif sub.status == 'rejected' %}
+                <span class="badge bg-danger">Отклонено</span>
+              {% else %}
+                <span class="badge bg-warning text-dark">На проверке</span>
+              {% endif %}
+            </td>
+            <td>{{ sub.task.reward_coins }} коинов</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info">Вы ещё не выполняли задания.</div>
+{% endif %}
+{% endblock %}

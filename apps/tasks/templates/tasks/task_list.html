@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title %}Задания — Плюс Клуб{% endblock %}
+
+{% block content %}
+<h2>Доступные задания</h2>
+<p class="lead">Выполняйте задания и получайте Плюс Коины</p>
+<hr class="border-warning">
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for task in tasks %}
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>{{ task.title }}</span>
+          <span class="badge bg-warning text-dark">{{ task.reward_coins }} коинов</span>
+        </div>
+        <div class="card-body">
+          <p>{{ task.description|truncatewords:25 }}</p>
+          <p class="text-muted small">Срок: {{ task.deadline|date:"d.m.Y H:i" }}</p>
+        </div>
+        <div class="card-footer bg-transparent">
+          {% if task.id in user_submissions %}
+            {% with sub=user_submissions|get_item:task.id %}
+              {% if sub.status == 'approved' %}
+                <button class="btn btn-success w-100" disabled>Одобрено</button>
+              {% elif sub.status == 'rejected' %}
+                <button class="btn btn-danger w-100" disabled>Отклонено</button>
+              {% else %}
+                <button class="btn btn-secondary w-100" disabled>На проверке</button>
+              {% endif %}
+            {% endwith %}
+          {% else %}
+            <a href="{% url 'task_detail' task.id %}" class="btn btn-primary w-100">Выполнить</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info">Нет активных заданий. Загляните позже!</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

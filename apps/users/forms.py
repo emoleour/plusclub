@@ -91,9 +91,84 @@ class ManagerForm(forms.ModelForm):
     )
     class Meta:
         model = User
-        fieds = ['email', 'first_name', 'last_name', 'patronymic', 'phone', 'is_active']
+        fields = ['email', 'first_name', 'last_name', 'patronymic', 'phone', 'is_active']
         widgets = {
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'patronymic': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        pwd1 = cleaned_data.get('password1')
+        pwd2 = cleaned_data.get('password2')
+        if pwd1 or pwd2:
+            if pwd1 != pwd2:
+                raise forms.ValidationError('Пароли не совпадают')
+        return cleaned_data
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError('Пользователь с таким email уже существует.')
+        return email
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+
+        if not user.pk:
+            user.role = 'manager'
+
+        password = self.cleaned_data.get('password1')
+
+        if password:
+            user.set_password(password)
+        if commit:
+            user.save()
+        return user
+
+
+class AdminForm(forms.ModelForm):
+    password1 = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False,
+        help_text='Оставьте поле пустым, если не хотите менять пароль'
+    )
+    password2 = forms.CharField(
+        label='Подтверждение пароля',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        required=False
+    )
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name', 'patronymic', 'phone', 'is_active']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        pwd1 = cleaned_data.get('password1')
+        pwd2 = cleaned_data.get('password2')
+        if pwd1 or pwd2:
+            if pwd1 != pwd2:
+                raise forms.ValidationError('Пароли не совпадают.')
+        return cleaned_data
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError('Пользователь с таким email уже существует.')
+        return email
+
+    def save(self, commit=True):
+        user = super().save(commit)
+        if not user.pk:
+            user.role = 'admin'
+        password = self.cleaned_data.get('password1')
+        if password:
+            user.set_password(password)
+        if commit:
+            user.save()
+        return user

@@ -2,6 +2,9 @@
 {% block title %}Панель администратора — Плюс Клуб{% endblock %}
 
 {% block content %}
+<div class="alert alert-info">
+  Отладка: is_superadmin = {{ is_superadmin }}, роль = {{ user.role }}
+</div>
 <div class="row">
   <div class="col-12">
     <h2>Панель администратора</h2>
@@ -17,18 +20,29 @@
       <div class="card-header bg-primary text-dark">Менеджеры</div>
       <div class="card-body">
         <p>Управление менеджерами: создание, редактирование, удаление.</p>
-        <a href="#" class="btn btn-outline-primary">Открыть</a>
+        <a href="{% url 'manager_list' %}" class="btn btn-outline-primary">Открыть</a>
       </div>
     </div>
   </div>
 
-  <!-- Задания -->
+  <!-- Управление заданиями -->
   <div class="col">
     <div class="card h-100">
-      <div class="card-header bg-primary text-dark">Задания</div>
+      <div class="card-header bg-primary text-dark">Управление заданиями</div>
       <div class="card-body">
-        <p>Создание и проверка заданий для пользователей.</p>
-        <a href="#" class="btn btn-outline-primary">Открыть</a>
+        <p>Создание, редактирование и удаление заданий для пользователей.</p>
+        <a href="{% url 'task_manage_list' %}" class="btn btn-outline-primary">Открыть</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Проверка заданий -->
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-header bg-primary text-dark">Проверка заданий</div>
+      <div class="card-body">
+        <p>Просмотр и проверка выполненных заданий пользователями.</p>
+        <a href="{% url 'review_list' %}" class="btn btn-outline-primary">Открыть</a>
       </div>
     </div>
   </div>
@@ -66,7 +80,7 @@
     </div>
   </div>
 
-  <!-- История покупок (общий просмотр) -->
+  <!-- История покупок -->
   <div class="col">
     <div class="card h-100">
       <div class="card-header bg-primary text-dark">История покупок</div>
@@ -78,13 +92,13 @@
   </div>
 
   {% if is_superadmin %}
-  <!-- Управление администраторами (только для суперадмина) -->
+  <!-- Администраторы (только для суперадмина) -->
   <div class="col">
     <div class="card h-100 border-warning">
       <div class="card-header bg-warning text-dark">Администраторы (суперадмин)</div>
       <div class="card-body">
         <p>Создание и удаление администраторов системы.</p>
-        <a href="#" class="btn btn-outline-dark">Управлять</a>
+        <a href="{% url 'admin_list' %}" class="btn btn-outline-dark">Управлять</a>
       </div>
     </div>
   </div>

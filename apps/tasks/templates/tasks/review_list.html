@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Проверка заданий — Плюс Клуб{% endblock %}
+
+{% block content %}
+<h2>Проверка выполнения заданий</h2>
+<hr class="border-warning">
+
+<!-- Фильтр по статусу -->
+<div class="btn-group mb-3" role="group">
+  <a href="{% url 'review_list' %}" class="btn btn-outline-light {% if not status_filter %}active{% endif %}">Все</a>
+  <a href="?status=pending" class="btn btn-outline-warning {% if status_filter == 'pending' %}active{% endif %}">Ожидают</a>
+  <a href="?status=approved" class="btn btn-outline-success {% if status_filter == 'approved' %}active{% endif %}">Одобренные</a>
+  <a href="?status=rejected" class="btn btn-outline-danger {% if status_filter == 'rejected' %}active{% endif %}">Отклонённые</a>
+</div>
+
+{% if page_obj %}
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Задание</th>
+        <th>Пользователь</th>
+        <th>Дата</th>
+        <th>Статус</th>
+        <th>Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sub in page_obj %}
+      <tr>
+        <td>{{ sub.id }}</td>
+        <td>{{ sub.task.title }}</td>
+        <td>{{ sub.user.email }}</td>
+        <td>{{ sub.created_at|date:"d.m.Y H:i" }}</td>
+        <td>
+          {% if sub.status == 'pending' %}
+            <span class="badge bg-warning text-dark">На проверке</span>
+          {% elif sub.status == 'approved' %}
+            <span class="badge bg-success">Одобрено</span>
+          {% else %}
+            <span class="badge bg-danger">Отклонено</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'review_detail' sub.id %}" class="btn btn-sm btn-outline-primary">Просмотр</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Пагинация -->
+{% if page_obj.has_other_pages %}
+<nav>
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}">Назад</a></li>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+      <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+        <a class="page-link" href="?page={{ num }}{% if status_filter %}&status={{ status_filter }}{% endif %}">{{ num }}</a>
+      </li>
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}">Вперёд</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="alert alert-info">Нет откликов для проверки.</div>
+{% endif %}
+{% endblock %}

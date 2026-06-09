@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Управление заданиями — Плюс Клуб{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Управление заданиями</h2>
+  <a href="{% url 'task_manage_create' %}" class="btn btn-primary">Добавить задание</a>
+</div>
+
+{% if tasks %}
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Название</th>
+        <th>Коины</th>
+        <th>Срок</th>
+        <th>Активно</th>
+        <th>Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in tasks %}
+      <tr>
+        <td>{{ task.title }}</td>
+        <td>{{ task.reward_coins }}</td>
+        <td>{{ task.deadline|date:"d.m.Y H:i" }}</td>
+        <td>
+          {% if task.is_active %}
+            <span class="badge bg-success">Да</span>
+          {% else %}
+            <span class="badge bg-secondary">Нет</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'task_manage_update' task.id %}" class="btn btn-sm btn-outline-primary">Ред.</a>
+          <a href="{% url 'task_manage_delete' task.id %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted">Заданий ещё нет.</p>
+{% endif %}
+{% endblock %}

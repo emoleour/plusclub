@@ -76,7 +76,7 @@ def manager_reject(request, pk):
     relation = get_object_or_404(ManagerInstallerRelation, pk=pk)
     if relation.manager != request.user:
         raise PermissionDenied
-    if relation.method == 'POST':
+    if request.method == 'POST':
         installer = relation.installer
         relation.delete()
         messages.warning(request, f'Связь с монтажником {installer} удалена.')

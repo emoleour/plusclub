@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Рейтинг — Плюс Клуб{% endblock %}
+
+{% block content %}
+<h2>Рейтинг участников</h2>
+<p class="lead">{{ month }}.{{ year }} — Топ-20 по выполненным заданиям</p>
+<hr class="border-warning">
+
+{% if ratings %}
+  <ol class="rating-list">
+    {% for r in ratings %}
+      <li class="{% if forloop.counter <= 3 %}top{% endif %}">
+        <span>
+          <strong>{{ forloop.counter }}.</strong>
+          {{ r.user.first_name }} {{ r.user.last_name }}
+        </span>
+        <span class="badge bg-warning text-dark">{{ r.completed_count }} заданий</span>
+      </li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <div class="alert alert-info">В этом месяце ещё нет данных. Будьте первым!</div>
+{% endif %}
+{% endblock %}

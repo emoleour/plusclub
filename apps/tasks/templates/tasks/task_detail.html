@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Выполнение задания — Плюс Клуб{% endblock %}
+
+{% block content %}
+<h2>{{ task.title }}</h2>
+<p class="text-muted">Награда: <span class="text-warning">{{ task.reward_coins }} коинов</span></p>
+<hr class="border-warning">
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <h5>Описание задания</h5>
+        <p>{{ task.description }}</p>
+        <p class="small">Срок выполнения: {{ task.deadline|date:"d.m.Y H:i" }}</p>
+      </div>
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-header">Отправить выполнение</div>
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="photo" class="form-label">Фотоотчёт *</label>
+            <input type="file" name="photo" id="photo" class="form-control" required accept="image/*">
+            <div class="form-text">Загрузите фотографию, подтверждающую выполнение задания.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="comment" class="form-label">Комментарий (необязательно)</label>
+            <textarea name="comment" id="comment" rows="3" class="form-control" placeholder="Ваш комментарий..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Отправить на проверку</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
