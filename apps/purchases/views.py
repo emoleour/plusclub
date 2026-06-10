@@ -79,7 +79,7 @@ def import_csv(request):
                 messages.error(request, f'Ошибка при обработке файла: {e}')
     else:
         form = CSVUploadForm()
-    return render(request, 'purchase/import_csv.html', {'form': form})
+    return render(request, 'purchases/import_csv.html', {'form': form})
 
 
 # Create your views here.

@@ -3,9 +3,10 @@ import barcode
 from barcode.writer import ImageWriter
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_list_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import Reward, CoinWallet, CoinTransaction
+from apps.users.views import is_admin
 
 @login_required
 def barcode_image(request):
@@ -53,6 +54,88 @@ def redeem_reward(request, reward_id):
 def coin_history(request):
     transactions = request.user.coin_wallet.transactions.order_by('-created_at')
     return render(request, 'loyalty/coin_history.html', {'transactions': transactions})
+
+@login_required
+@user_passes_test(is_admin)
+def admin_coin_list(request):
+    """Список пользователей с кошельками для ручного управления"""
+    wallets = CoinWallet.objects.select_related('user').all().order_by('user__email')
+    query = request.GET.get('q')
+    if query:
+        wallets = wallets.filter(user__email__icontains=query) | wallets.filter(user__first__name__icontains=query) | wallets.filter(
+            user__last_name__icontains=query
+        )
+    return render(request, 'loyalty/admin_coin_list.html', {'wallets': wallets, 'query': query})
+
+@login_required
+@user_passes_test(is_admin)
+def admin_coin_transfer_form(request):
+    """ Страница для начисления/списания"""
+    wallets = CoinWallet.objects.select_related('user').all().order_by('user__email')
+    return render(request, 'loyalty/admin_coin_transfer.html', {'wallets': wallets})
+
+@login_required
+@user_passes_test(is_admin)
+def admin_coin_transfer_process(request):
+    """Обработка операции с коинами."""
+    if request.method == 'POST':
+        wallet_id = request.POST.get('wallet_id', '').strip()
+        amount = request.POST.get('amount', '').strip()
+        operation = request.POST.get('operation', '').strip()
+        reason = request.POST.get('reason', '').strip()
+
+        errors = []
+        if not wallet_id:
+            errors.append('Не выбран пользователь.')
+        if not amount:
+            errors.append('Не указана сумма.')
+        else:
+            try:
+                amount_int = int(amount)
+                if amount_int <= 0:
+                    errors.append('Сумма должна быть положительной.')
+            except ValueError:
+                errors.append('Сумма должна быть целым числом.')
+        if not operation:
+            errors.append('Не выбран тип операции.')
+        elif operation not in ['earn', 'spend']:
+            errors.append('Неверный тип операции.')
+
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            return redirect('admin_coin_transfer')
+
+        try:
+            wallet = CoinWallet.objects.select_related('user').get(id=int(wallet_id))
+        except (CoinWallet.DoesNotExist, ValueError):
+            messages.error(request, 'Кошелёк не найден.')
+            return redirect('admin_coin_transfer')
+
+        if operation == 'spend' and wallet.balance < amount_int:
+            messages.error(request, 'Недостаточно коинов.')
+            return redirect('admin_coin_transfer')
+
+        CoinTransaction.objects.create(
+            wallet=wallet,
+            amount=amount_int,
+            operation=operation,
+            reason=reason,
+            created_by=request.user
+        )
+        action = 'начислено' if operation == 'earn' else 'списано'
+        messages.success(request, f'Пользователю {wallet.user.email} {action} {amount_int} коинов.')
+        return redirect('admin_coin_list')
+
+    return redirect('admin_coin_list')
+
+@login_required
+@user_passes_test(is_admin)
+def admin_coin_history(request):
+    """Историря всех транзакций для админа"""
+
+    transactions = CoinTransaction.objects.select_related('wallet__user', 'created_by').order_by('-created_at')
+    return render(request, 'loyalty/admin_coin_history.html', {'transactions': transactions})
 
 
 

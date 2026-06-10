@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Управление коинами — Плюс Клуб{% endblock %}
+
+{% block content %}
+<h2>Управление Плюс Коинами</h2>
+<hr class="border-warning">
+
+<!-- Поиск -->
+<form class="mb-3" method="get">
+  <div class="input-group">
+    <input type="text" name="q" class="form-control" placeholder="Поиск по email или имени" value="{{ query|default:'' }}">
+    <button class="btn btn-primary" type="submit">Найти</button>
+  </div>
+</form>
+
+<!-- Кнопка перевода коинов (отдельная страница) -->
+<div class="mb-3">
+  <a href="{% url 'admin_coin_transfer' %}" class="btn btn-primary">Начислить / Списать коины</a>
+</div>
+
+{% if wallets %}
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Пользователь</th>
+        <th>Баланс</th>
+        <th>Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for wallet in wallets %}
+      <tr>
+        <td>{{ wallet.user.email }} ({{ wallet.user.last_name }} {{ wallet.user.first_name }})</td>
+        <td><strong class="text-warning">{{ wallet.balance }} коинов</strong></td>
+        <td>
+          <!-- Ссылка на страницу перевода (без модального окна) -->
+          <a href="{% url 'admin_coin_transfer' %}" class="btn btn-sm btn-outline-primary">Перевести</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info">Нет пользователей с кошельками.</div>
+{% endif %}
+{% endblock %}
