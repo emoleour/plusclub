@@ -28,6 +28,9 @@
                             <li class="nav-item"><a class="nav-link" href="{% url 'task_list' %}">Задания</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'submission_history' %}">Мои отклики</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'monthly_rating' %}">Рейтинг</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'user_promotion_list' %}">Акции</a>
+                        </li>
                         {% endif %}
                         {% if user.role == 'manager' %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'manager_dashboard' %}">Мои монтажники</a></li>

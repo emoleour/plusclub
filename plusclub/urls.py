@@ -26,4 +26,5 @@ urlpatterns = [
     path('loyalty/', include('apps.loyalty.urls')),
     path('tasks/', include('apps.tasks.urls')),
     path('purchases/', include('apps.purchases.urls')),
+    path('promotions/', include('apps.promotions.urls')),
 ]

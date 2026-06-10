@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Акции — Плюс Клуб{% endblock %}
+
+{% block content %}
+<h2>Текущие акции</h2>
+<hr class="border-warning">
+
+{% if promotions %}
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for promo in promotions %}
+      <div class="col">
+        <div class="card h-100">
+          {% if promo.image %}
+            <img src="{{ promo.image.url }}" class="card-img-top" alt="{{ promo.title }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ promo.title }}</h5>
+            <p class="card-text">{{ promo.description }}</p>
+            <p class="text-muted small">
+              Действует с {{ promo.start_date|date:"d.m.Y" }} по {{ promo.end_date|date:"d.m.Y" }}
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">Сейчас нет активных акций.</div>
+{% endif %}
+{% endblock %}

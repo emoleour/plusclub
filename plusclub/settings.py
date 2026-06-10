@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'apps.crm',
     'apps.loyalty',
     'apps.tasks',
-    'apps.purchases'
+    'apps.purchases',
+    'apps.promotions',
 ]
 
 AUTH_USER_MODEL = 'users.User'
