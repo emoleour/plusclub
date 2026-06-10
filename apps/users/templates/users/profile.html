@@ -116,9 +116,18 @@
           <div class="card-body">
             <p>Менеджер: <strong>{{ manager.email }}</strong></p>
             <div class="qr-codes">
-              <div class="qr-item"><img src="https://via.placeholder.com/100" alt="QR 10%"><p class="mt-2">Скидка 10%</p></div>
-              <div class="qr-item"><img src="https://via.placeholder.com/100" alt="QR 5% + кешбэк"><p class="mt-2">Скидка 5% + кешбэк 5%</p></div>
-              <div class="qr-item"><img src="https://via.placeholder.com/100" alt="QR кешбэк 10%"><p class="mt-2">Кешбэк 10%</p></div>
+              <div class="qr-item">
+                <img src="{% url 'installer_qr_code' 1 %}" alt="QR 10%">
+                <p class="mt-2">Скидка 10%</p>
+              </div>
+              <div class="qr-item">
+                <img src="{% url 'installer_qr_code' 2 %}" alt="QR 5% + кешбэк">
+                <p class="mt-2">Скидка 5% + кешбэк 5%</p>
+              </div>
+              <div class="qr-item">
+                <img src="{% url 'installer_qr_code' 3 %}" alt="QR кешбэк 10%">
+                <p class="mt-2">Кешбэк 10%</p>
+              </div>
             </div>
           </div>
         </div>

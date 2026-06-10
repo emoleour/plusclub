@@ -7,6 +7,7 @@ from django.utils import timezone
 from .models import Task, TaskSubmission, MonthlyRating
 from .forms import TaskForm
 from apps.users.views import is_admin
+from apps.notifications.utils import create_notification
 
 
 @login_required
@@ -82,6 +83,12 @@ def review_detail(request, submission_id):
         action = request.POST.get('action')
         if action == 'approve' and submission.status == 'pending':
             submission.approve(request.user)
+            create_notification(
+                user=submission.user,
+                title='Задание одобрено',
+                message=f'Ваше задание"{submission.task.title}" одобрено. Начислено {submission.task.reward_coins} коинов.',
+                link='/tasks/history'
+            )
             messages.success(request, f'Отклик пользователя {submission.user.email} одобрен. Начислено {submission.task.reward_coins} коинов.')
         elif action == 'reject' and submission.status == 'pending':
             submission.status == 'rejected'

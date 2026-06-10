@@ -24,20 +24,34 @@
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Профиль</a></li>
+
                         {% if user.role == 'individual' or user.role == 'installer' %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'task_list' %}">Задания</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'submission_history' %}">Мои отклики</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'monthly_rating' %}">Рейтинг</a></li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'user_promotion_list' %}">Акции</a>
-                        </li>
                         {% endif %}
+
                         {% if user.role == 'manager' %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'manager_dashboard' %}">Мои монтажники</a></li>
                         {% endif %}
+
                         {% if user.role == 'admin' or user.role == 'superadmin' %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}">Админпанель</a></li>
                         {% endif %}
+
+                        <li class="nav-item"><a class="nav-link" href="#">Товары</a></li>
+
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" href="{% url 'notification_list' %}">
+                                🔔
+                                {% if unread_notifications_count %}
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ unread_notifications_count }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        </li>
+
                         <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Выход</a></li>
                     {% else %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Вход</a></li>

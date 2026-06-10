@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import Reward, CoinWallet, CoinTransaction
 from apps.users.views import is_admin
+from apps.notifications.utils import create_notification
 
 @login_required
 def barcode_image(request):
@@ -124,6 +125,12 @@ def admin_coin_transfer_process(request):
             created_by=request.user
         )
         action = 'начислено' if operation == 'earn' else 'списано'
+        create_notification(
+            user=wallet.user,
+            title='Изменение баланса коинов',
+            message=f'Вам {action} {amount_int} коинов. Причина: {reason or 'не указана'}.',
+            link='/profile/'
+        )
         messages.success(request, f'Пользователю {wallet.user.email} {action} {amount_int} коинов.')
         return redirect('admin_coin_list')
 

@@ -2,14 +2,14 @@ import csv
 import io
 from datetime import datetime
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 from .forms import CSVUploadForm
 from .models import Purchase
 from apps.users.models import User
-from apps.loyalty.models import LoyaltyCard
+#from apps.loyalty.models import LoyaltyCard
 
 
 def is_admin(user):

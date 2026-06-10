@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from .forms import SelectManagerForm
 from .models import ManagerInstallerRelation
 from apps.purchases.models import Purchase
+from apps.notifications.utils import create_notification
 
 User = get_user_model()
 
@@ -61,11 +62,19 @@ def manager_dashboard(request):
 def manager_confirm(request, pk):
     relation = get_object_or_404(ManagerInstallerRelation, pk=pk)
 
+
     if relation.manager != request.user:
         raise PermissionDenied
     if request.method == 'POST':
         relation.confirmed = True
         relation.save()
+        create_notification(
+        user=relation.installer,
+        title='Аккаунт подтвержден',
+        message=f'Менеджер {relation.manager.get_full_name()} подтвердил вашу регистрацию',
+        link='/profile/'
+    )
+
         messages.success(request, f'Монтажник {relation.installer} подтвержден.')
         return redirect('manager_dashboard')
     return redirect('manager_dashboard')
