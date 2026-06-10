@@ -8,6 +8,7 @@ from django.conf import settings
 from django.urls import reverse
 from .forms import UserRegistrationForm, UserLoginForm, ManagerForm, AdminForm
 from .models import User
+from apps.purchases.models import Purchase
 
 
 signer = TimestampSigner()
@@ -115,6 +116,7 @@ def profile(request):
         context['manager_confirmed'] = user.manager_relation.confirmed
         context['manager'] = user.manager_relation.manager
 
+
     elif user.role == 'manager':
         return redirect('manager_dashboard')
 
@@ -151,6 +153,8 @@ def profile(request):
             'next_discount': next_discount,
             'wallet': wallet,
         })
+        purchases = Purchase.objects.filter(user=user).order_by('-purchase_date')[:10]
+        context['purchases'] = purchases
 
     return render(request, 'users/profile.html', context)
 

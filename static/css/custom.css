@@ -215,123 +215,87 @@ main {
   }
 }
 
-/* Контейнер для адаптивной карты */
-.discount-card-wrapper {
-  max-width: 320px;
-  width: 100%;
-  margin: 0 auto 1.5rem;
-}
-
-/* Банковская карта — адаптивная */
+/* Банковская дисконтная карта */
 .discount-card-bank {
-  position: relative;
-  width: 100%;
-  padding-bottom: 62.5%; /* Соотношение сторон: высота = ширина * 0.625 (приближено к 54/85.6) */
+  width: 320px;
+  height: 200px;
+  margin: 0 auto 1.5rem;
   background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
   border: 1px solid rgba(255, 193, 7, 0.5);
   border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 12px rgba(255, 193, 7, 0.2);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7), 0 0 12px rgba(255,193,7,0.2);
+  position: relative;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
   transition: transform 0.3s ease;
 }
 .discount-card-bank:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8), 0 0 16px rgba(255, 193, 7, 0.4);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.8), 0 0 16px rgba(255,193,7,0.4);
 }
-
-/* Внутренний контейнер для абсолютного позиционирования */
-.discount-card-bank-inner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 16px 16px 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* Чип */
 .discount-card-bank .card-chip {
+  position: absolute;
+  top: 20px;
+  left: 20px;
   width: 40px;
   height: 30px;
   background: linear-gradient(135deg, #d4af37, #f5e7b3);
   border-radius: 6px;
-  align-self: flex-start;
 }
-
-/* Логотип */
 .discount-card-bank .card-logo {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 20px;
+  right: 20px;
   font-weight: 700;
-  font-size: clamp(0.9rem, 4vw, 1.2rem);
+  font-size: 1.2rem;
   color: #FFC107;
   letter-spacing: 1px;
 }
-
-/* Номер карты */
 .discount-card-bank .card-number {
+  position: absolute;
+  top: 80px;
+  left: 20px;
+  right: 20px;
   font-family: 'Courier New', monospace;
-  font-size: clamp(1rem, 5vw, 1.5rem);
-  letter-spacing: 2px;
+  font-size: 1.5rem;
+  letter-spacing: 3px;
   color: #FFC107;
-  text-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
-  word-spacing: 6px;
-  text-align: center;
-  margin-top: auto;
-  margin-bottom: auto;
+  text-shadow: 0 0 8px rgba(255,193,7,0.6);
 }
-
-/* Блок держателя и скидки */
-.discount-card-bank .card-bottom-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-/* Держатель */
 .discount-card-bank .card-holder {
-  font-size: clamp(0.65rem, 2.5vw, 0.9rem);
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+  font-size: 0.9rem;
   text-transform: uppercase;
   color: #ccc;
 }
 .discount-card-bank .card-holder span {
   display: block;
-  font-size: clamp(0.8rem, 3vw, 1.1rem);
+  font-size: 1.1rem;
   color: #fff;
   margin-top: 2px;
-  text-transform: none;
 }
-
-/* Скидка */
 .discount-card-bank .card-discount {
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
   background: #FFC107;
   color: #121212;
-  padding: 3px 10px;
+  padding: 3px 12px;
   border-radius: 20px;
   font-weight: 700;
-  font-size: clamp(0.7rem, 2.8vw, 0.9rem);
+  font-size: 0.9rem;
 }
-
-/* Штрихкод */
 .discount-card-bank .card-barcode {
+  position: absolute;
+  bottom: 15px;
+  left: 20px;
+  right: 20px;
   text-align: center;
-  margin-top: 4px;
 }
 .discount-card-bank .card-barcode img {
-  height: auto;
-  max-height: 30px;
+  height: 30px;
   width: 100%;
   object-fit: contain;
-}
-
-/* Медиа-запрос для очень маленьких экранов (дополнительное уменьшение отступов) */
-@media (max-width: 360px) {
-  .discount-card-bank-inner {
-    padding: 10px 10px 8px;
-  }
 }

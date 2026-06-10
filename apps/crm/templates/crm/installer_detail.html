@@ -18,7 +18,30 @@
     <div class="card">
       <div class="card-header">История покупок</div>
       <div class="card-body">
-        <p class="text-muted">Здесь будет история покупок (пока нет данных).</p>
+        {% if purchases %}
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Дата</th>
+                  <th>Сумма</th>
+                  <th>Товаров</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in purchases %}
+                <tr>
+                  <td>{{ p.purchase_date|date:"d.m.Y H:i" }}</td>
+                  <td>{{ p.total_amount }} ₽</td>
+                  <td>{{ p.items_data|length }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p>Пока нет истории покупок.</p>
+        {% endif %}
       </div>
     </div>
   </div>

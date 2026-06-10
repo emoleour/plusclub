@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from .forms import SelectManagerForm
 from .models import ManagerInstallerRelation
+from apps.purchases.models import Purchase
 
 User = get_user_model()
 
@@ -92,11 +93,12 @@ def installer_detail(request, pk):
     relation = ManagerInstallerRelation.objects.filter(manager=request.user, installer=installer).first()
     if not relation:
         raise PermissionDenied
+    purchases = Purchase.objects.filter(user=request.user).order_by('-purchase_date')[:10]
 
     context = {
         'installer': installer,
         'relation': relation,
-        'purchases': [],
+        'purchases': purchases,
     }
     return render(request, 'crm/installer_detail.html', context)
 
