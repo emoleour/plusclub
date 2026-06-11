@@ -2,6 +2,8 @@ from rest_framework import generics, status, viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 
 from django.shortcuts import get_object_or_404
@@ -20,7 +22,7 @@ from apps.loyalty.models import CoinWallet, CoinTransaction, Reward
 from apps.tasks.models import Task, TaskSubmission
 from apps.promotions.models import Promotion
 from apps.notifications.models import Notification
-from .serializers import ProductSerializer, PurchaseSerializer
+from .serializers import ProductSerializer, PurchaseSerializer, CustomTokenObtainPairSerializer
 from . import serializers
 
 User = get_user_model()
@@ -200,17 +202,14 @@ class NotificationReadAllView(generics.GenericAPIView):
 class ActivateAccountView(APIView):
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request):
-        serializer = serializers.ActivateAccountSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        token = serializer.validated_data['token']
-
+    def _activate_user(self, token):
+        """Общая логика активации пользователя по токену."""
         try:
-            email = signer.unsign(token, max_age=86400)
+            email = signer.unsign(token, max_age=86400)  # 24 часа
         except SignatureExpired:
             return Response({'error': 'Срок действия ссылки истёк'}, status=status.HTTP_400_BAD_REQUEST)
         except BadSignature:
-            return Response({'error': 'Неверная ссылка для активации'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Неверная ссылка активации'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(email=email)
@@ -222,7 +221,18 @@ class ActivateAccountView(APIView):
 
         user.is_active = True
         user.save()
-        return Response({'message:' 'Аккаунт успешно активирован'})
+        return Response({'message': 'Аккаунт успешно активирован'})
+
+    def post(self, request):
+        """Активация через POST (токен в теле запроса)."""
+        serializer = serializers.ActivateAccountSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        token = serializer.validated_data['token']
+        return self._activate_user(token)
+
+    def get(self, request, token=None):
+        """Активация по прямой ссылке (токен в URL)."""
+        return self._activate_user(token)
 
 class PasswordResetRequestView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -271,3 +281,6 @@ class PasswordResetConfirmView(APIView):
         user.set_password(new_password)
         user.save()
         return Response({'message': 'Пароль успешно изменен'})
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.core.mail import send_mail
@@ -161,3 +162,11 @@ class PasswordResetRequestSerializer(serializers.Serializer):
 class PasswordResetConfirmSerializer(serializers.Serializer):
     token = serializers.CharField()
     new_password = serializers.CharField(min_length=8, write_only=True)
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = 'email'   # явно указываем, что используется email
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Переименовываем поле в 'email' для удобства клиентов
+        self.fields['email'] = self.fields.pop('username')

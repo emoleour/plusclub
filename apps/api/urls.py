@@ -15,7 +15,8 @@ urlpatterns = [
     path('transactions/', views.CoinTransactionListView.as_view(), name='transactions'),
     path('rewards/', views.RewardListView.as_view(), name='rewards'),
     path('rewards/<int:reward_id>/redeem/', views.RedeemRewardView.as_view()),
-    path('auth/activate/', views.ActivateAccountView.as_view(), name='auth_activate'),
+    path('auth/activate/', views.ActivateAccountView.as_view(), name='auth_activate_post'),
+    path('auth/activate/<str:token>/', views.ActivateAccountView.as_view(), name='auth_activate_get'),
     path('auth/password-reset/', views.PasswordResetRequestView.as_view(), name='password_reset_request'),
     path('auth/password-reset/confirm', views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 

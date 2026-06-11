@@ -19,9 +19,9 @@ from django.urls import path, include
 from apps.users.views import home_redirect
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
     TokenRefreshView,
 )
+from apps.api.views import CustomTokenObtainPairView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,7 +34,7 @@ urlpatterns = [
     path('promotions/', include('apps.promotions.urls')),
     path('notifications/', include('apps.notifications.urls')),
     path('products/', include('apps.products.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/', include('apps.api.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
