@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
+from django.urls import reverse
 from .forms import SelectManagerForm
 from .models import ManagerInstallerRelation
 from apps.purchases.models import Purchase
@@ -72,7 +73,7 @@ def manager_confirm(request, pk):
         user=relation.installer,
         title='Аккаунт подтвержден',
         message=f'Менеджер {relation.manager.get_full_name()} подтвердил вашу регистрацию',
-        link='/profile/'
+        link=reverse('profile')
     )
 
         messages.success(request, f'Монтажник {relation.installer} подтвержден.')

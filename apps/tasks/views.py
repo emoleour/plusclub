@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
-#from django.db.models import Q
+from django.urls import reverse
 from django.contrib import messages
 from django.utils import timezone
 from .models import Task, TaskSubmission, MonthlyRating
@@ -87,7 +87,7 @@ def review_detail(request, submission_id):
                 user=submission.user,
                 title='Задание одобрено',
                 message=f'Ваше задание"{submission.task.title}" одобрено. Начислено {submission.task.reward_coins} коинов.',
-                link='/tasks/history'
+                link=reverse('profile')
             )
             messages.success(request, f'Отклик пользователя {submission.user.email} одобрен. Начислено {submission.task.reward_coins} коинов.')
         elif action == 'reject' and submission.status == 'pending':
@@ -95,6 +95,12 @@ def review_detail(request, submission_id):
             submission.reviewed_by = request.user
             submission.reviewed_at = timezone.now()
             submission.save()
+            create_notification(
+                user=submission.user,
+                title='Задание отклонено',
+                message=f'Ваше задание"{submission.task.title}" отклонено.',
+                link=reverse('profile')
+            )
             messages.warning(request, 'Отклик отклонён.')
         return redirect('review_list')
     context = {'submission': submission}
