@@ -1,306 +1,280 @@
-/* === Импорт современного шрифта === */
+/* === Шрифт === */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* === Основные переменные (переопределение Bootstrap) === */
+/* === Переопределение Bootstrap переменных === */
 :root {
   --bs-primary: #FFC107;
   --bs-primary-rgb: 255, 193, 7;
-  --bs-secondary: #6C757D;
   --bs-dark: #121212;
-  --bs-dark-rgb: 18, 18, 18;
   --bs-body-bg: #1A1A1A;
-  --bs-body-color: #E0E0E0;
+  --bs-body-color: #EAEAEA;
   --bs-border-color: #333333;
   --bs-link-color: #FFC107;
-  --bs-link-hover-color: #E0A800;
-  --bs-card-bg: rgba(30, 30, 30, 0.7);
+  --bs-link-hover-color: #FFD54F;
+  --bs-card-bg: rgba(30, 30, 30, 0.85);
   --bs-card-border-color: rgba(255, 193, 7, 0.15);
-  --glass-bg: rgba(18, 18, 18, 0.6);
-  --glass-border: rgba(255, 193, 7, 0.2);
+  --glass-bg: rgba(18, 18, 18, 0.7);
+  --glass-border: rgba(255, 193, 7, 0.25);
 }
 
 /* === Общие стили === */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: radial-gradient(ellipse at top, #adadad, #0d0d0d);
-  color: #E0E0E0;
-  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(ellipse at top, #1a1a1a, #0d0d0d);
+  color: var(--bs-body-color);
 }
 
+/* Улучшение читаемости всех надписей */
 a {
+  color: var(--bs-link-color);
   text-decoration: none;
-  transition: color 0.2s ease;
 }
 a:hover {
-  color: #FFC107;
+  color: var(--bs-link-hover-color);
 }
 
-/* === Навигация === */
+.form-label, .form-text, .card-title, .card-text,
+.table, .list-group-item, .navbar-brand, .nav-link,
+.text-muted, .small, .lead, h1, h2, h3, h4, h5, h6 {
+  color: #EAEAEA !important;
+}
+
+.text-muted {
+  color: #B0B0B0 !important;
+}
+
+/* Навигация */
 .navbar {
-  background: rgba(18, 18, 18, 0.85) !important;
+  background: rgba(18, 18, 18, 0.9) !important;
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 193, 7, 0.3) !important;
+  border-bottom: 1px solid rgba(255, 193, 7, 0.4) !important;
 }
 .navbar-brand {
   font-weight: 700;
   font-size: 1.6rem;
-  letter-spacing: 0.5px;
   background: linear-gradient(135deg, #FFC107, #FFD54F);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* === Кнопки === */
+/* Кнопки */
 .btn-primary {
   background: linear-gradient(135deg, #FFC107, #FFB300);
   border: none;
-  color: #1E1E1E;
+  color: #121212;
   font-weight: 600;
   border-radius: 12px;
   padding: 10px 20px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(255,193,7,0.3);
 }
-.btn-primary:hover, .btn-primary:focus {
+.btn-primary:hover {
   background: linear-gradient(135deg, #FFD54F, #FFC107);
-  color: #121212;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.5);
-}
-.btn-outline-primary {
-  border: 1.5px solid #FFC107;
-  color: #FFC107;
-  border-radius: 12px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-.btn-outline-primary:hover {
-  background: #FFC107;
-  color: #121212;
+  box-shadow: 0 8px 20px rgba(255,193,7,0.5);
 }
 
-/* === Карточки === */
+/* Карточки */
 .card {
   background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
-}
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(255, 193, 7, 0.1);
-  border-color: rgba(255, 193, 7, 0.4);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  color: var(--bs-body-color);
 }
 .card-header {
   background: transparent;
-  border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+  border-bottom: 1px solid var(--glass-border);
   font-weight: 600;
-  letter-spacing: 0.3px;
 }
 
-/* === Прогресс-бар дисконтной карты === */
-.progress {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  height: 0.7rem;
-  overflow: hidden;
-}
-.progress-bar {
-  background: linear-gradient(90deg, #FFC107, #FFD54F);
-  box-shadow: 0 0 10px rgba(255, 193, 7, 0.6);
-  border-radius: 20px;
-  transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
-/* === Дисконтная карта === */
-.discount-card {
-  background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
-  border: 1px solid rgba(255, 193, 7, 0.4);
-  border-radius: 24px;
-  padding: 2rem;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 193, 7, 0.1);
-  transition: all 0.3s ease;
-}
-.discount-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 193, 7, 0.2);
-}
-.card-number {
-  font-family: 'Courier New', monospace;
-  font-size: 1.5rem;
-  letter-spacing: 3px;
-  text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
-  color: #FFC107;
-}
-
-/* === Таблицы === */
+/* Таблицы */
 .table {
-  color: #E0E0E0;
-  border-collapse: separate;
-  border-spacing: 0 4px;
+  color: #EAEAEA;
 }
 .table thead th {
-  border-bottom: 2px solid #FFC107;
-  color: #FFC107;
-  font-weight: 600;
+  border-bottom: 2px solid var(--bs-primary);
+  color: var(--bs-primary);
 }
 .table td, .table th {
-  border: none;
+  border-color: var(--bs-border-color);
   background: transparent;
 }
-.table tbody tr {
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 12px;
-  transition: background 0.2s;
-}
 .table tbody tr:hover {
-  background: rgba(255, 193, 7, 0.05);
+  background: rgba(255,193,7,0.05);
 }
 
-/* === Формы === */
+/* Формы */
 .form-control, .form-select {
-  background: rgba(18, 18, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(18,18,18,0.9);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #EAEAEA;
   border-radius: 12px;
-  padding: 10px 16px;
-  transition: all 0.3s;
 }
 .form-control:focus, .form-select:focus {
-  background: #1a1a1a;
-  border-color: #FFC107;
-  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25);
-  color: #fff;
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 3px rgba(255,193,7,0.3);
 }
 
-/* === Уведомления === */
-.alert {
-  border-radius: 16px;
-  backdrop-filter: blur(5px);
-  background: rgba(30, 30, 30, 0.7) !important;
-}
-.alert-success {
-  border-left: 4px solid #28A745;
-}
-.alert-error, .alert-danger {
-  border-left: 4px solid #DC3545;
-}
-.alert-warning {
-  border-left: 4px solid #FFC107;
+/* Прогресс-бар (шкала скидки) */
+.progress {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  height: 1.4rem;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,193,7,0.2);
 }
 
-/* === Футер === */
-.footer {
-  background: rgba(18, 18, 18, 0.8) !important;
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255, 193, 7, 0.3) !important;
+.progress-bar {
+  background: linear-gradient(90deg, #FFC107, #FFD54F);
+  box-shadow: 0 0 12px rgba(255,193,7,0.8);
+  border-radius: 20px;
+  transition: width 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #121212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  min-width: 2em;
 }
 
-/* === Анимация появления контента === */
-main {
-  animation: fadeInUp 0.6s ease;
-}
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Банковская дисконтная карта */
-.discount-card-bank {
-  width: 320px;
-  height: 200px;
+/* ========= Дисконтная карта (адаптивная, как банковская) ========= */
+.discount-card-wrapper {
+  max-width: 340px;
+  width: 100%;
   margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
-  border: 1px solid rgba(255, 193, 7, 0.5);
+}
+
+.discount-card-bank {
+  position: relative;
+  width: 100%;
+  padding-bottom: 63%;  /* 54/85.6 ≈ 0.63 */
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  border: 1px solid rgba(255,193,7,0.5);
   border-radius: 14px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.7), 0 0 12px rgba(255,193,7,0.2);
-  position: relative;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s;
 }
 .discount-card-bank:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(0,0,0,0.8), 0 0 16px rgba(255,193,7,0.4);
 }
-.discount-card-bank .card-chip {
+
+.discount-card-bank-inner {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 0; left: 0; right: 0; bottom: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Чип */
+.card-chip {
   width: 40px;
   height: 30px;
   background: linear-gradient(135deg, #d4af37, #f5e7b3);
   border-radius: 6px;
+  align-self: flex-start;
 }
-.discount-card-bank .card-logo {
+
+/* Логотип */
+.card-logo {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 16px;
+  right: 16px;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 3.5vw, 1.2rem);
   color: #FFC107;
   letter-spacing: 1px;
 }
-.discount-card-bank .card-number {
-  position: absolute;
-  top: 80px;
-  left: 20px;
-  right: 20px;
+
+/* Номер карты */
+.card-number {
   font-family: 'Courier New', monospace;
-  font-size: 1.5rem;
-  letter-spacing: 3px;
+  font-size: clamp(1rem, 4.5vw, 1.5rem);
+  letter-spacing: 2px;
   color: #FFC107;
   text-shadow: 0 0 8px rgba(255,193,7,0.6);
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
 }
-.discount-card-bank .card-holder {
-  position: absolute;
-  bottom: 50px;
-  left: 20px;
-  font-size: 0.9rem;
+
+/* Нижний ряд */
+.card-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.card-holder {
+  font-size: clamp(0.65rem, 2.5vw, 0.9rem);
   text-transform: uppercase;
   color: #ccc;
 }
-.discount-card-bank .card-holder span {
+.card-holder span {
   display: block;
-  font-size: 1.1rem;
+  font-size: clamp(0.8rem, 3vw, 1.1rem);
   color: #fff;
   margin-top: 2px;
+  text-transform: none;
 }
-.discount-card-bank .card-discount {
-  position: absolute;
-  bottom: 50px;
-  right: 20px;
+
+.card-discount {
   background: #FFC107;
   color: #121212;
-  padding: 3px 12px;
+  padding: 3px 10px;
   border-radius: 20px;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: clamp(0.7rem, 2.8vw, 0.9rem);
 }
-.discount-card-bank .card-barcode {
-  position: absolute;
-  bottom: 15px;
-  left: 20px;
-  right: 20px;
+
+/* Штрихкод */
+.card-barcode {
   text-align: center;
+  margin-top: 4px;
 }
-.discount-card-bank .card-barcode img {
-  height: 30px;
+.card-barcode img {
+  height: auto;
+  max-height: 30px;
   width: 100%;
   object-fit: contain;
 }
 
-.qr-item img {
-  width: 120px;
-  height: 120px;
+/* Адаптация под очень маленькие экраны */
+@media (max-width: 360px) {
+  .discount-card-bank-inner {
+    padding: 10px;
+  }
+}
+
+/* Административная история коинов */
+#coin-history-admin-table {
+  color: #EAEAEA !important;
+}
+#coin-history-admin-table thead th {
+  color: #FFC107 !important;
+  border-bottom: 2px solid #FFC107 !important;
+  background: transparent !important;
+}
+#coin-history-admin-table tbody td {
+  color: #FFFFFF !important;
+  background: transparent !important;
+}
+#coin-history-admin-table tbody tr {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+#coin-history-admin-table tbody tr:hover {
+  background: rgba(255, 193, 7, 0.1) !important;
+}
+#coin-history-admin-table .coin-amount {
+  color: #FFC107 !important;
+  font-weight: 500;
 }

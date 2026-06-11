@@ -1,5 +1,6 @@
 import csv
 import io
+import json
 from datetime import datetime
 
 from django.shortcuts import render
@@ -24,6 +25,7 @@ def import_csv(request):
             csv_file = form.cleaned_data['csv_file']
             encoding = form.cleaned_data['encoding']
             delimiter = form.cleaned_data['delimiter']
+            skip_header = form.cleaned_data['skip_header']
 
             try:
                 data_set = csv_file.read().decode(encoding)
@@ -32,6 +34,9 @@ def import_csv(request):
 
                 created = 0
                 updated_cards = set()
+                if skip_header:
+                    next(reader, None)
+
 
                 for row in reader:
                     if not row or row[0].startswith('#'):
@@ -58,11 +63,23 @@ def import_csv(request):
 
                         continue
 
+                    ext_id = row[3].strip() if len(row) > 3 else ''
+                    if ext_id and Purchase.objects.filter(external_id=ext_id).exists():
+                        continue
+
+                    items_json = row[4].strip() if len(row) > 4 else '[]'
+
+                    try:
+                        items = json.loads(items_json)
+                    except json.JSONDecodeError:
+                        items = []
+
                     Purchase.objects.create(
                         user=user,
                         purchase_date=purchase_date,
                         total_amount=amount,
-                        external_id=external_id
+                        external_id=external_id,
+                        items_data=items,
                     )
                     created += 1
 

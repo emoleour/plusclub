@@ -11,7 +11,7 @@
 </div>
 
 <div class="row">
-  <!-- Общая информация -->
+  <!-- Общая информация (для всех) -->
   <div class="col-md-4 mb-4">
     <div class="card h-100">
       <div class="card-header">Мои данные</div>
@@ -29,44 +29,67 @@
       <!-- Банковская дисконтная карта -->
       <div class="card mb-4">
         <div class="card-header">Дисконтная карта</div>
-        <div class="discount-card-wrapper">
-          <div class="discount-card-bank">
-            <div class="discount-card-bank-inner">
-            <!-- Чип -->
-            <div class="card-chip"></div>
-            <!-- Логотип -->
-            <div class="card-logo">ПЛЮС КЛУБ</div>
-            <!-- Номер карты -->
-            <div class="card-number">{{ card.card_number }}</div>
-            <!-- Нижний ряд: держатель и скидка -->
-            <div class="card-bottom-row">
-              <div class="card-holder">
-                Держатель карты
-                <span>{{ user.last_name }} {{ user.first_name }}</span>
+        <div class="card-body text-center">
+          <div class="discount-card-wrapper">
+            <div class="discount-card-bank">
+              <div class="discount-card-bank-inner">
+                <!-- Чип -->
+                <div class="card-chip"></div>
+                <!-- Логотип -->
+                <div class="card-logo">ПЛЮС КЛУБ</div>
+                <!-- Номер карты -->
+                <div class="card-number">{{ card.card_number }}</div>
+                <!-- Нижний ряд: держатель и скидка -->
+                <div class="card-bottom-row">
+                  <div class="card-holder">
+                    Держатель карты
+                    <span>{{ user.last_name }} {{ user.first_name }}</span>
+                  </div>
+                  <div class="card-discount">{{ card.discount_level }}%</div>
+                </div>
+                <!-- Штрихкод -->
+                <div class="card-barcode">
+                  <img src="{% url 'barcode_image' %}" alt="Штрихкод">
+                </div>
               </div>
-              <div class="card-discount">{{ card.discount_level }}%</div>
             </div>
-            <!-- Штрихкод -->
-            <div class="card-barcode">
-              <img src="{% url 'barcode_image' %}" alt="Штрихкод">
           </div>
-        </div>
-      </div>
-    </div>
 
-          <!-- Прогресс-бар и информация о накоплениях -->
-          <div class="progress mt-3" style="max-width: 400px; margin-left: auto; margin-right: auto;">
-            <div class="progress-bar" role="progressbar" style="width: {{ progress_percent }}%;" aria-valuenow="{{ progress_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+          <!-- Прогресс-бар с динамической анимацией -->
+          <div class="mt-4" style="max-width: 400px; margin-left: auto; margin-right: auto;">
+            <div class="progress" id="discount-progress-container">
+              <div class="progress-bar" id="discount-progress-bar"
+                  role="progressbar"
+                  style="width: 0%;"
+                  aria-valuenow="{{ progress_percent|floatformat:0 }}"
+                  aria-valuemin="0" aria-valuemax="100">
+                {{ progress_percent|floatformat:0 }}%
+              </div>
+            </div>
+            <small class="text-light mt-2 d-block text-center">
+              {% if next_threshold %}
+                Накоплено {{ card.total_spent }} из {{ next_threshold }} ₽ для скидки {{ next_discount }}%
+              {% else %}
+                Максимальная скидка 10% достигнута!
+              {% endif %}
+            </small>
           </div>
-          <small class="text-muted mt-1 d-block">
-            {% if next_threshold %}
-              Накоплено {{ card.total_spent }} из {{ next_threshold }} ₽ для скидки {{ next_discount }}%
-            {% else %}
-              Максимальная скидка 10% достигнута!
-            {% endif %}
-          </small>
-        </div>
-      </div>
+
+          <!-- Скрипт анимации -->
+          <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const bar = document.getElementById('discount-progress-bar');
+            if (bar) {
+              const targetPercent = bar.getAttribute('aria-valuenow');
+              if (targetPercent) {
+                // Запускаем анимацию через 50 мс после загрузки
+                setTimeout(() => {
+                  bar.style.width = targetPercent + '%';
+                }, 50);
+              }
+            }
+          });
+          </script>
 
       <!-- Кошелёк -->
       <div class="card mb-4">
@@ -86,7 +109,7 @@
         <div class="card-body">
           {% if purchases %}
             <div class="table-responsive">
-              <table class="table table-hover">
+              <table class="table">
                 <thead>
                   <tr><th>Дата</th><th>Сумма</th><th>Товаров</th></tr>
                 </thead>
@@ -116,18 +139,9 @@
           <div class="card-body">
             <p>Менеджер: <strong>{{ manager.email }}</strong></p>
             <div class="qr-codes">
-              <div class="qr-item">
-                <img src="{% url 'installer_qr_code' 1 %}" alt="QR 10%">
-                <p class="mt-2">Скидка 10%</p>
-              </div>
-              <div class="qr-item">
-                <img src="{% url 'installer_qr_code' 2 %}" alt="QR 5% + кешбэк">
-                <p class="mt-2">Скидка 5% + кешбэк 5%</p>
-              </div>
-              <div class="qr-item">
-                <img src="{% url 'installer_qr_code' 3 %}" alt="QR кешбэк 10%">
-                <p class="mt-2">Кешбэк 10%</p>
-              </div>
+              <div class="qr-item"><img src="https://via.placeholder.com/100" alt="QR 10%"><p class="mt-2">Скидка 10%</p></div>
+              <div class="qr-item"><img src="https://via.placeholder.com/100" alt="QR 5% + кешбэк"><p class="mt-2">Скидка 5% + кешбэк 5%</p></div>
+              <div class="qr-item"><img src="https://via.placeholder.com/100" alt="QR кешбэк 10%"><p class="mt-2">Кешбэк 10%</p></div>
             </div>
           </div>
         </div>
@@ -178,3 +192,4 @@
   {% endif %}
 </div>
 {% endblock %}
+

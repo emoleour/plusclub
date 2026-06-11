@@ -15,3 +15,8 @@ class CSVUploadForm(forms.Form):
         max_length=5,
         label='Разделитель'
     )
+    skip_header = forms.BooleanField(
+        required=False,
+        initial=True,
+        label='Пропустить первую строку(заголовки)'
+    )

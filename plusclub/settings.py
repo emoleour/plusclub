@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environs
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5s9*zku&8ro7kv_q!@nk0s3a9hwb*s30&-92p$2f)1(ce!&5su'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+API_SECRET_KEY = os.environ.get('API_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,7 +50,27 @@ INSTALLED_APPS = [
     'apps.promotions',
     'apps.notifications',
     'apps.products',
+    'apps.api',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'drf_spectacular',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Плюс Клуб API',
+    'DESCRIPTION': 'API для мобильного приложения системы лояльности',
+    'VERSION': '1.0.0',
+}
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -136,3 +160,5 @@ PHONENUMBER_DEFAULT_REGION = 'RU'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DEFAULT_FROM_EMAIL = 'noreply@sib-a.ru'
+
+BASE_URL = 'http://localhost:8000'
