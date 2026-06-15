@@ -69,7 +69,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
         token = signer.sign(user.email)
 
-        activation_url = f'{settings.BASE_URL or 'http://localhost:8000'}/api/v1/auth/activate/{token}/'
+        activation_url = f'{settings.BASE_URL or "http://localhost:8000"}/api/v1/auth/activate/{token}/'
         send_email_async(
             subject='Подтверждение регистрации в Плюс Клубе',
             message=f'Для активации перейдите по ссылке: {activation_url}',
