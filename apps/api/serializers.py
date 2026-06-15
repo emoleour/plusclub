@@ -14,6 +14,7 @@ from apps.loyalty.models import LoyaltyCard, CoinWallet, CoinTransaction, Reward
 from apps.tasks.models import Task, TaskSubmission
 from apps.promotions.models import Promotion
 from apps.notifications.models import Notification
+from apps.users.email_utils import send_email_async
 
 signer = TimestampSigner()
 
@@ -69,12 +70,11 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         token = signer.sign(user.email)
 
         activation_url = f'{settings.BASE_URL or 'http://localhost:8000'}/api/v1/auth/activate/{token}/'
-        send_mail(
+        send_email_async(
             subject='Подтверждение регистрации в Плюс Клубе',
             message=f'Для активации перейдите по ссылке: {activation_url}',
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[user.email],
-            fail_silently=False,
         )
         return user
 

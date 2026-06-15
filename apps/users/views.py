@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.mail import send_mail
+#from django.core.mail import send_mail
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.conf import settings
 from django.urls import reverse
 from .forms import UserRegistrationForm, UserLoginForm, ManagerForm, AdminForm
 from .models import User
 from apps.purchases.models import Purchase
+from .email_utils import send_email_async
 
 
 signer = TimestampSigner()
@@ -42,12 +43,11 @@ def register(request):
             print(f'activation url: {activation_url}')
 
             #отправка письма
-            send_mail(
+            send_email_async(
                 subject='Подтверждение регистрации в Плюс Клуб',
                 message=f"Для активации перейдите по ссылке:' {activation_url}",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[user.email],
-                fail_silently=True,
             )
 
             messages.success(request, 'Регистрация прошла! Проверьте почту для активации.')
