@@ -27,8 +27,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-key-local')
 API_SECRET_KEY = os.environ.get('API_SECRET_KEY', 'dev-key-locales')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'FALSE') == 'True'
-
+#DEBUG = os.environ.get('DEBUG', 'FALSE') == 'True'
+DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
