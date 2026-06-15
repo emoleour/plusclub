@@ -188,7 +188,7 @@ PHONENUMBER_DEFAULT_REGION = 'RU'
 
 DEFAULT_FROM_EMAIL = 'noreply@sib-a.ru'
 
-BASE_URL = 'http://localhost:8000'
+BASE_URL = os.environ.get('BASE_URL', 'http://localhost:8000')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
