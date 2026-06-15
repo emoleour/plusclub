@@ -47,7 +47,7 @@ def register(request):
                 message=f"Для активации перейдите по ссылке:' {activation_url}",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[user.email],
-                fail_silently=False,
+                fail_silently=True,
             )
 
             messages.success(request, 'Регистрация прошла! Проверьте почту для активации.')
