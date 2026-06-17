@@ -1,97 +1,145 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Регистрация — Плюс Клуб{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-md-8 col-lg-6">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="mb-0">Регистрация в Плюс Клубе</h4>
+  <div class="col-lg-5 col-md-7 col-sm-9">
+    <div class="card p-4">
+      <!-- Заголовок -->
+      <div class="login-header mb-4">
+        <div class="logo-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 12l2.5 2.5L16 9"/>
+          </svg>
+        </div>
+        <h1>Регистрация</h1>
+        <p class="subtitle">Создайте аккаунт в Плюс Клубе</p>
       </div>
-      <div class="card-body">
-        <form method="post" novalidate>
-          {% csrf_token %}
 
-          {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-              {% for error in form.non_field_errors %}
-                {{ error }}
-              {% endfor %}
+      <!-- Форма -->
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="error-message">
+            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+          </div>
+        {% endif %}
+
+        <!-- Email -->
+        <div class="input-group-custom">
+          <div class="input-field">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/>
+              </svg>
+            </span>
+            <input type="email" name="email" id="id_email" placeholder="Email" required
+                   class="{% if form.email.errors %}has-error{% endif %}">
+            <span class="focus-border"></span>
+          </div>
+          {% if form.email.errors %}<span class="field-error">{{ form.email.errors.0 }}</span>{% endif %}
+        </div>
+
+        <!-- Имя и Фамилия в одну строку на планшетах, а на телефоне друг под другом -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="input-field">
+              <input type="text" name="first_name" id="id_first_name" placeholder="Имя" required
+                     class="{% if form.first_name.errors %}has-error{% endif %}">
+              <span class="focus-border"></span>
             </div>
-          {% endif %}
-
-          <div class="mb-3">
-            <label for="id_email" class="form-label">{{ form.email.label }}</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-              <div class="text-danger mt-1">{% for error in form.email.errors %}{{ error }}{% endfor %}</div>
-            {% endif %}
+            {% if form.first_name.errors %}<span class="field-error">{{ form.first_name.errors.0 }}</span>{% endif %}
           </div>
-
-          <div class="row">
-            <div class="col-md-4 mb-3">
-              <label for="id_last_name" class="form-label">{{ form.last_name.label }}</label>
-              {{ form.last_name }}
-              {% if form.last_name.errors %}<div class="text-danger">{% for error in form.last_name.errors %}{{ error }}{% endfor %}</div>{% endif %}
+          <div class="col-md-6 mb-3">
+            <div class="input-field">
+              <input type="text" name="last_name" id="id_last_name" placeholder="Фамилия" required
+                     class="{% if form.last_name.errors %}has-error{% endif %}">
+              <span class="focus-border"></span>
             </div>
-            <div class="col-md-4 mb-3">
-              <label for="id_first_name" class="form-label">{{ form.first_name.label }}</label>
-              {{ form.first_name }}
-              {% if form.first_name.errors %}<div class="text-danger">{% for error in form.first_name.errors %}{{ error }}{% endfor %}</div>{% endif %}
+            {% if form.last_name.errors %}<span class="field-error">{{ form.last_name.errors.0 }}</span>{% endif %}
+          </div>
+        </div>
+
+        <!-- Отчество -->
+        <div class="input-group-custom">
+          <div class="input-field">
+            <input type="text" name="patronymic" id="id_patronymic" placeholder="Отчество (необязательно)"
+                   class="{% if form.patronymic.errors %}has-error{% endif %}">
+            <span class="focus-border"></span>
+          </div>
+          {% if form.patronymic.errors %}<span class="field-error">{{ form.patronymic.errors.0 }}</span>{% endif %}
+        </div>
+
+        <!-- Телефон -->
+        <div class="input-group-custom">
+          <div class="input-field">
+            <input type="tel" name="phone" id="id_phone" placeholder="Номер телефона" required
+                   class="{% if form.phone.errors %}has-error{% endif %}">
+            <span class="focus-border"></span>
+          </div>
+          {% if form.phone.errors %}<span class="field-error">{{ form.phone.errors.0 }}</span>{% endif %}
+        </div>
+
+        <!-- Роль -->
+        <div class="input-group-custom">
+          <div class="input-field">
+            <select name="role" id="id_role" required
+                    class="{% if form.role.errors %}has-error{% endif %}">
+              <option value="">Выберите роль</option>
+              <option value="individual">Физическое лицо</option>
+              <option value="installer">Монтажник</option>
+            </select>
+            <span class="focus-border"></span>
+          </div>
+          {% if form.role.errors %}<span class="field-error">{{ form.role.errors.0 }}</span>{% endif %}
+        </div>
+
+        <!-- Пароль и подтверждение -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="input-field">
+              <input type="password" name="password1" id="id_password1" placeholder="Пароль" required
+                     class="{% if form.password1.errors %}has-error{% endif %}">
+              <span class="focus-border"></span>
             </div>
-            <div class="col-md-4 mb-3">
-              <label for="id_patronymic" class="form-label">{{ form.patronymic.label }}</label>
-              {{ form.patronymic }}
-              {% if form.patronymic.errors %}<div class="text-danger">{% for error in form.patronymic.errors %}{{ error }}{% endfor %}</div>{% endif %}
+            {% if form.password1.errors %}<span class="field-error">{{ form.password1.errors.0 }}</span>{% endif %}
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="input-field">
+              <input type="password" name="password2" id="id_password2" placeholder="Подтверждение" required
+                     class="{% if form.password2.errors %}has-error{% endif %}">
+              <span class="focus-border"></span>
             </div>
+            {% if form.password2.errors %}<span class="field-error">{{ form.password2.errors.0 }}</span>{% endif %}
           </div>
+        </div>
 
-          <div class="mb-3">
-            <label for="id_phone" class="form-label">{{ form.phone.label }}</label>
-            {{ form.phone }}
-            {% if form.phone.errors %}<div class="text-danger">{% for error in form.phone.errors %}{{ error }}{% endfor %}</div>{% endif %}
+        <!-- Галочки согласия -->
+        <div class="mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="agree_pd" id="agree_pd" required>
+            <label class="form-check-label" for="agree_pd">Согласен на обработку персональных данных</label>
           </div>
-
-          <div class="mb-3">
-            <label for="id_role" class="form-label">{{ form.role.label }}</label>
-            {{ form.role }}
-            {% if form.role.errors %}<div class="text-danger">{% for error in form.role.errors %}{{ error }}{% endfor %}</div>{% endif %}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="agree_rules" id="agree_rules" required>
+            <label class="form-check-label" for="agree_rules">Принимаю условия программы лояльности</label>
           </div>
+        </div>
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="id_password1" class="form-label">{{ form.password1.label }}</label>
-              {{ form.password1 }}
-              {% if form.password1.errors %}<div class="text-danger">{% for error in form.password1.errors %}{{ error }}{% endfor %}</div>{% endif %}
-              {% if form.password1.help_text %}<div class="form-text text-muted">{{ form.password1.help_text }}</div>{% endif %}
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="id_password2" class="form-label">{{ form.password2.label }}</label>
-              {{ form.password2 }}
-              {% if form.password2.errors %}<div class="text-danger">{% for error in form.password2.errors %}{{ error }}{% endfor %}</div>{% endif %}
-            </div>
-          </div>
+        <!-- Кнопка -->
+        <button type="submit" class="btn btn-primary w-100 mt-2">
+          Зарегистрироваться
+          <span class="arrow-icon">→</span>
+        </button>
 
-          <div class="mb-3 form-check">
-            {{ form.agree_pd }}
-            <label class="form-check-label" for="{{ form.agree_pd.id_for_label }}">
-              {{ form.agree_pd.label }}
-            </label>
-            {% if form.agree_pd.errors %}<div class="text-danger">{% for error in form.agree_pd.errors %}{{ error }}{% endfor %}</div>{% endif %}
-          </div>
-
-          <div class="mb-3 form-check">
-            {{ form.agree_rules }}
-            <label class="form-check-label" for="{{ form.agree_rules.id_for_label }}">
-              {{ form.agree_rules.label }}
-            </label>
-            {% if form.agree_rules.errors %}<div class="text-danger">{% for error in form.agree_rules.errors %}{{ error }}{% endfor %}</div>{% endif %}
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
-        </form>
-        <p class="mt-3 text-center">Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
-      </div>
+        <div class="forgot-link mt-3 text-center">
+          <a href="{% url 'login' %}">Уже есть аккаунт? Войдите</a>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -2,43 +2,45 @@
 {% block title %}Начислить / списать коины — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>Начислить или списать Плюс Коины</h2>
-<hr class="border-warning">
-
 <div class="row justify-content-center">
-  <div class="col-md-8 col-lg-6">
-    <div class="card">
-      <div class="card-body">
-        <form method="post" action="{% url 'admin_coin_transfer_process' %}" novalidate>
-          {% csrf_token %}
-          <div class="mb-3">
-            <label for="wallet_id" class="form-label">Пользователь</label>
-            <select name="wallet_id" id="wallet_id" class="form-select" required>
-              <option value="">-- выберите --</option>
-              {% for wallet in wallets %}
-                <option value="{{ wallet.id }}">{{ wallet.user.email }} ({{ wallet.user.last_name }} {{ wallet.user.first_name }}) — {{ wallet.balance }} коинов</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="operation" class="form-label">Тип операции</label>
-            <select name="operation" id="operation" class="form-select" required>
-              <option value="">-- выберите --</option>
-              <option value="earn">Начислить</option>
-              <option value="spend">Списать</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="amount" class="form-label">Сумма (коинов)</label>
-            <input type="number" name="amount" id="amount" class="form-control" min="1" required>
-          </div>
-          <div class="mb-3">
-            <label for="reason" class="form-label">Причина</label>
-            <textarea name="reason" id="reason" rows="2" class="form-control"></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Выполнить</button>
-        </form>
-      </div>
+  <div class="col-lg-5 col-md-7">
+    <div class="card p-4">
+      <h4 class="text-warning mb-4 text-center">Начислить или списать Плюс Коины</h4>
+      <form method="post" action="{% url 'admin_coin_transfer_process' %}" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="wallet_id" class="form-label" style="color: #EAEAEA;">Пользователь</label>
+          <select name="wallet_id" id="wallet_id" class="form-select" required
+                  style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;">
+            <option value="" style="color: #A0A0A0;">-- выберите --</option>
+            {% for wallet in wallets %}
+              <option value="{{ wallet.id }}" style="color: #FFFFFF;">
+                {{ wallet.user.email }} ({{ wallet.user.last_name }} {{ wallet.user.first_name }}) — {{ wallet.balance }} коинов
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="operation" class="form-label" style="color: #EAEAEA;">Тип операции</label>
+          <select name="operation" id="operation" class="form-select" required
+                  style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;">
+            <option value="" style="color: #A0A0A0;">-- выберите --</option>
+            <option value="earn" style="color: #FFFFFF;">Начислить</option>
+            <option value="spend" style="color: #FFFFFF;">Списать</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="amount" class="form-label" style="color: #EAEAEA;">Сумма (коинов)</label>
+          <input type="number" name="amount" id="amount" class="form-control" min="1" required
+                 style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;">
+        </div>
+        <div class="mb-3">
+          <label for="reason" class="form-label" style="color: #EAEAEA;">Причина</label>
+          <textarea name="reason" id="reason" rows="2" class="form-control"
+                    style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Выполнить</button>
+      </form>
     </div>
   </div>
 </div>

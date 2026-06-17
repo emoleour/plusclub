@@ -2,105 +2,74 @@
 {% block title %}Панель администратора — Плюс Клуб{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-12">
-    <h2>Панель администратора</h2>
-    <p class="lead">Управление системой лояльности</p>
-    <hr class="border-warning">
-  </div>
-</div>
+<h2 class="mb-4" style="color: #F5C518;">Панель администратора</h2>
 
-<div class="row row-cols-1 row-cols-md-2 g-4">
+<div class="row g-4">
   <!-- Менеджеры -->
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-header bg-primary text-dark">Менеджеры</div>
-      <div class="card-body">
-        <p>Управление менеджерами: создание, редактирование, удаление.</p>
-        <a href="{% url 'manager_list' %}" class="btn btn-outline-primary">Открыть</a>
-      </div>
+  <div class="col-lg-4 col-md-6">
+    <div class="card p-4 h-100">
+      <h5 class="text-warning mb-3">Менеджеры</h5>
+      <p class="text-secondary small">Управление менеджерами: создание, редактирование, удаление.</p>
+      <a href="{% url 'manager_list' %}" class="btn btn-outline-primary btn-sm">Открыть</a>
     </div>
   </div>
-
   <!-- Управление заданиями -->
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-header bg-primary text-dark">Управление заданиями</div>
-      <div class="card-body">
-        <p>Создание, редактирование и удаление заданий для пользователей.</p>
-        <a href="{% url 'task_manage_list' %}" class="btn btn-outline-primary">Открыть</a>
-      </div>
+  <div class="col-lg-4 col-md-6">
+    <div class="card p-4 h-100">
+      <h5 class="text-warning mb-3">Управление заданиями</h5>
+      <p class="text-secondary small">Создание, редактирование и удаление заданий.</p>
+      <a href="{% url 'task_manage_list' %}" class="btn btn-outline-primary btn-sm">Открыть</a>
     </div>
   </div>
-
   <!-- Проверка заданий -->
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-header bg-primary text-dark">Проверка заданий</div>
-      <div class="card-body">
-        <p>Просмотр и проверка выполненных заданий пользователями.</p>
-        <a href="{% url 'review_list' %}" class="btn btn-outline-primary">Открыть</a>
-      </div>
+  <div class="col-lg-4 col-md-6">
+    <div class="card p-4 h-100">
+      <h5 class="text-warning mb-3">Проверка заданий</h5>
+      <p class="text-secondary small">Просмотр и проверка выполненных заданий.</p>
+      <a href="{% url 'review_list' %}" class="btn btn-outline-primary btn-sm">Открыть</a>
     </div>
   </div>
-
   <!-- Акции -->
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-header bg-primary text-dark">Акции</div>
-      <div class="card-body">
-        <p>Управление акциями и специальными предложениями.</p>
-        <a href="{% url 'admin_promotion_list' %}" class="btn btn-outline-primary">Открыть</a>
-      </div>
+  <div class="col-lg-4 col-md-6">
+    <div class="card p-4 h-100">
+      <h5 class="text-warning mb-3">Акции</h5>
+      <p class="text-secondary small">Управление акциями и специальными предложениями.</p>
+      <a href="{% url 'admin_promotion_list' %}" class="btn btn-outline-primary btn-sm">Открыть</a>
     </div>
   </div>
-
   <!-- Товары -->
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-header bg-primary text-dark">Товары</div>
-      <div class="card-body">
-        <p>Карточки товаров для интернет-магазина.</p>
-        <a href="{% url 'admin_product_list' %}" class="btn btn-outline-primary">Открыть</a>
-      </div>
+  <div class="col-lg-4 col-md-6">
+    <div class="card p-4 h-100">
+      <h5 class="text-warning mb-3">Товары</h5>
+      <p class="text-secondary small">Карточки товаров для интернет-магазина.</p>
+      <a href="{% url 'admin_product_list' %}" class="btn btn-outline-primary btn-sm">Открыть</a>
     </div>
   </div>
-
-  <!-- Плюс Коины (ручное начисление) -->
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-header bg-primary text-dark">Плюс Коины</div>
-      <div class="card-body">
-        <p>Начисление и списание коинов у пользователей.</p>
-        <a href="{% url 'admin_coin_list' %}" class="btn btn-outline-primary">Открыть</a>
-        <a href="{% url 'admin_coin_history' %}" class="btn btn-outline-primary mt-2">История операций</a>
-      </div>
+  <!-- Плюс Коины -->
+  <div class="col-lg-4 col-md-6">
+    <div class="card p-4 h-100">
+      <h5 class="text-warning mb-3">Плюс Коины</h5>
+      <p class="text-secondary small">Начисление и списание коинов у пользователей.</p>
+      <a href="{% url 'admin_coin_list' %}" class="btn btn-outline-primary btn-sm">Открыть</a>
     </div>
   </div>
-
   <!-- История покупок -->
-  <div class="col">
-    <div class="card h-100">
-      <div class="card-header bg-primary text-dark">История покупок</div>
-      <div class="card-body">
-        <p>Просмотр покупок всех клиентов.</p>
-        <a href="{% url 'import_csv' %}" class="btn btn-outline-primary">Открыть</a>
-      </div>
+  <div class="col-lg-4 col-md-6">
+    <div class="card p-4 h-100">
+      <h5 class="text-warning mb-3">История покупок</h5>
+      <p class="text-secondary small">Просмотр покупок всех клиентов.</p>
+      <a href="{% url 'import_csv' %}" class="btn btn-outline-primary btn-sm">Открыть</a>
     </div>
   </div>
-
-  {% if is_superadmin %}
   <!-- Администраторы (только для суперадмина) -->
-  <div class="col">
-    <div class="card h-100 border-warning">
-      <div class="card-header bg-warning text-dark">Администраторы (суперадмин)</div>
-      <div class="card-body">
-        <p>Создание и удаление администраторов системы.</p>
-        <a href="{% url 'admin_list' %}" class="btn btn-outline-dark">Управлять</a>
-      </div>
+  {% if is_superadmin %}
+  <div class="col-lg-4 col-md-6">
+    <div class="card p-4 h-100" style="border-color: #F5C518;">
+      <h5 class="text-warning mb-3">Администраторы</h5>
+      <p class="text-secondary small">Создание и удаление администраторов системы.</p>
+      <a href="{% url 'admin_list' %}" class="btn btn-primary btn-sm">Управлять</a>
     </div>
   </div>
   {% endif %}
 </div>
-
 {% endblock %}

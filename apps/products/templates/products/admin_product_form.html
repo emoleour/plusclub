@@ -3,18 +3,14 @@
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-md-8 col-lg-6">
-    <div class="card">
-      <div class="card-header">
-        <h4>{% if action == 'create' %}Добавить товар{% else %}Редактировать товар{% endif %}</h4>
-      </div>
-      <div class="card-body">
-        <form method="post" enctype="multipart/form-data" novalidate>
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit" class="btn btn-primary w-100">Сохранить</button>
-        </form>
-      </div>
+  <div class="col-lg-6">
+    <div class="card p-4">
+      <h4 class="text-warning mb-4 text-center">{% if action == 'create' %}Добавить товар{% else %}Редактировать товар{% endif %}</h4>
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary w-100 mt-3">Сохранить</button>
+      </form>
     </div>
   </div>
 </div>

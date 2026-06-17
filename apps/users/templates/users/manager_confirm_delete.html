@@ -3,18 +3,15 @@
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-md-6">
-    <div class="card border-danger">
-      <div class="card-header bg-danger text-white">Подтверждение деактивации</div>
-      <div class="card-body">
-        <p>Вы уверены, что хотите деактивировать менеджера <strong>{{ manager.last_name }} {{ manager.first_name }}</strong>?</p>
-        <p>Менеджер не сможет войти в систему и подтверждать монтажников.</p>
-        <form method="post">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger">Деактивировать</button>
-          <a href="{% url 'manager_list' %}" class="btn btn-secondary">Отмена</a>
-        </form>
-      </div>
+  <div class="col-lg-5 col-md-7">
+    <div class="card p-4 text-center" style="border-color: #dc3545;">
+      <h5 class="text-danger mb-3">Подтверждение деактивации</h5>
+      <p style="color: #EAEAEA;">Деактивировать менеджера <strong style="color: #FFFFFF;">{{ manager.last_name }} {{ manager.first_name }}</strong>?</p>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Деактивировать</button>
+        <a href="{% url 'manager_list' %}" class="btn btn-secondary">Отмена</a>
+      </form>
     </div>
   </div>
 </div>

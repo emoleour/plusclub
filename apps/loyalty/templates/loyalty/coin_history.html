@@ -2,39 +2,40 @@
 {% block title %}История коинов — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>История операций с Плюс Коинами</h2>
-<hr class="border-warning">
+<h2 class="mb-4" style="color: #F5C518;">История операций с Плюс Коинами</h2>
 
 {% if transactions %}
   <div class="table-responsive">
-    <table class="table table-hover" style="color: #EAEAEA !important;">
+    <table class="table mb-0">
       <thead>
-        <tr style="border-bottom: 2px solid #FFC107;">
-          <th style="color: #FFC107 !important; background: none;">Дата</th>
-          <th style="color: #FFC107 !important; background: none;">Операция</th>
-          <th style="color: #FFC107 !important; background: none;">Сумма</th>
-          <th style="color: #FFC107 !important; background: none;">Основание</th>
+        <tr>
+          <th>Дата</th>
+          <th>Операция</th>
+          <th>Сумма</th>
+          <th>Основание</th>
         </tr>
       </thead>
       <tbody>
         {% for tx in transactions %}
-        <tr style="background: rgba(255,255,255,0.05) !important;">
-          <td style="color: #FFFFFF !important; background: none;">{{ tx.created_at|date:"d.m.Y H:i" }}</td>
-          <td style="background: none;">
-            {% if tx.operation == 'earn' %}
-              <span class="badge bg-success" style="color: #FFFFFF !important;">Начисление</span>
-            {% else %}
-              <span class="badge bg-danger" style="color: #FFFFFF !important;">Списание</span>
-            {% endif %}
-          </td>
-          <td style="color: #FFC107 !important; font-weight: 500; background: none;">{{ tx.amount }} коинов</td>
-          <td style="color: #DDDDDD !important; background: none;">{{ tx.reason|default:"—" }}</td>
-        </tr>
+          <tr>
+            <td style="color: #EAEAEA;">{{ tx.created_at|date:"d.m.Y H:i" }}</td>
+            <td>
+              {% if tx.operation == 'earn' %}
+                <span class="badge bg-success">Начисление</span>
+              {% else %}
+                <span class="badge bg-danger">Списание</span>
+              {% endif %}
+            </td>
+            <td style="color: #F5C518; font-weight: 500;">{{ tx.amount }} коинов</td>
+            <td style="color: #A0A0A0;">{{ tx.reason|default:"—" }}</td>
+          </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 {% else %}
-  <div class="alert alert-info">У вас пока нет операций с коинами.</div>
+  <div class="alert alert-info" style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2); color: #FFFFFF;">
+    У вас пока нет операций с коинами.
+  </div>
 {% endif %}
 {% endblock %}

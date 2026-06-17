@@ -3,41 +3,21 @@
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-md-8 col-lg-5">
-    <div class="card manager-select-card">
-      <div class="card-header">
-        <h4 class="mb-0">Выберите вашего менеджера</h4>
-      </div>
-      <div class="card-body">
-        <p>Для завершения регистрации укажите менеджера, который будет вас курировать.</p>
-        <form method="post" novalidate>
-          {% csrf_token %}
-
-          {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-              {% for error in form.non_field_errors %}
-                {{ error }}
-              {% endfor %}
-            </div>
+  <div class="col-lg-5 col-md-7">
+    <div class="card p-4">
+      <h4 class="text-warning mb-3 text-center">Выберите менеджера</h4>
+      <p class="text-secondary mb-4 text-center">Для завершения регистрации укажите менеджера, который будет вас курировать.</p>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="{{ form.manager.id_for_label }}" class="form-label" style="color: #EAEAEA;">{{ form.manager.label }}</label>
+          {{ form.manager }}
+          {% if form.manager.errors %}
+            <div class="text-danger small mt-1">{{ form.manager.errors.0 }}</div>
           {% endif %}
-
-          <div class="mb-3">
-            <label for="{{ form.manager.id_for_label }}" class="form-label">{{ form.manager.label }}</label>
-            {{ form.manager }}
-            {% if form.manager.errors %}
-              <div class="text-danger mt-1">{% for error in form.manager.errors %}{{ error }}{% endfor %}</div>
-            {% endif %}
-            {% if form.manager.help_text %}
-              <div class="form-text text-muted">{{ form.manager.help_text }}</div>
-            {% endif %}
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100">Подтвердить выбор</button>
-        </form>
-        <p class="mt-3 text-center">
-          <a href="{% url 'profile' %}">Пропустить</a> (можно выбрать позже)
-        </p>
-      </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Подтвердить выбор</button>
+      </form>
     </div>
   </div>
 </div>

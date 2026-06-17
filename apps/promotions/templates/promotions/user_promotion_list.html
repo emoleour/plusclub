@@ -2,29 +2,28 @@
 {% block title %}Акции — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>Текущие акции</h2>
-<hr class="border-warning">
+<h2 class="mb-4" style="color: #F5C518;">Текущие акции</h2>
 
 {% if promotions %}
-  <div class="row row-cols-1 row-cols-md-3 g-4">
+  <div class="row g-4">
     {% for promo in promotions %}
-      <div class="col">
-        <div class="card h-100">
+      <div class="col-lg-4 col-md-6">
+        <div class="card p-4 h-100">
           {% if promo.image %}
-            <img src="{{ promo.image.url }}" class="card-img-top" alt="{{ promo.title }}">
+            <img src="{{ promo.image.url }}" class="card-img-top mb-3" alt="{{ promo.title }}" style="border-radius: 12px; height: 200px; object-fit: cover;">
           {% endif %}
-          <div class="card-body">
-            <h5 class="card-title">{{ promo.title }}</h5>
-            <p class="card-text">{{ promo.description }}</p>
-            <p class="text-muted small">
-              Действует с {{ promo.start_date|date:"d.m.Y" }} по {{ promo.end_date|date:"d.m.Y" }}
-            </p>
-          </div>
+          <h5 style="color: #FFFFFF;">{{ promo.title }}</h5>
+          <p class="text-secondary small">{{ promo.description }}</p>
+          <p class="text-secondary small mt-auto mb-0">
+            Действует с {{ promo.start_date|date:"d.m.Y" }} по {{ promo.end_date|date:"d.m.Y" }}
+          </p>
         </div>
       </div>
     {% endfor %}
   </div>
 {% else %}
-  <div class="alert alert-info">Сейчас нет активных акций.</div>
+  <div class="alert alert-info" style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2); color: #FFFFFF;">
+    Сейчас нет активных акций.
+  </div>
 {% endif %}
 {% endblock %}

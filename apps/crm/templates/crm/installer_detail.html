@@ -3,48 +3,50 @@
 
 {% block content %}
 <div class="row">
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-header">Информация о монтажнике</div>
-      <div class="card-body">
-        <p><strong>ФИО:</strong> {{ installer.last_name }} {{ installer.first_name }} {{ installer.patronymic|default:"" }}</p>
-        <p><strong>Email:</strong> {{ installer.email }}</p>
-        <p><strong>Телефон:</strong> {{ installer.phone }}</p>
-        <p><strong>Статус:</strong> {% if relation.confirmed %}Подтверждён{% else %}Не подтверждён{% endif %}</p>
-      </div>
+  <div class="col-lg-4 mb-4">
+    <div class="card p-4">
+      <h5 class="text-warning mb-3">Информация о монтажнике</h5>
+      <p class="mb-1"><strong style="color: #EAEAEA;">ФИО:</strong> <span style="color: #FFFFFF;">{{ installer.last_name }} {{ installer.first_name }} {{ installer.patronymic|default:"" }}</span></p>
+      <p class="mb-1"><strong style="color: #EAEAEA;">Email:</strong> <span style="color: #FFFFFF;">{{ installer.email }}</span></p>
+      <p class="mb-1"><strong style="color: #EAEAEA;">Телефон:</strong> <span style="color: #FFFFFF;">{{ installer.phone }}</span></p>
+      <p class="mb-0"><strong style="color: #EAEAEA;">Статус:</strong>
+        {% if relation.confirmed %}
+          <span class="badge bg-success">Подтверждён</span>
+        {% else %}
+          <span class="badge bg-warning text-dark">Не подтверждён</span>
+        {% endif %}
+      </p>
     </div>
   </div>
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-header">История покупок</div>
-      <div class="card-body">
-        {% if purchases %}
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <thead>
+  <div class="col-lg-8">
+    <div class="card p-4">
+      <h5 class="text-warning mb-3">История покупок</h5>
+      {% if purchases %}
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Сумма</th>
+                <th>Товаров</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in purchases %}
                 <tr>
-                  <th>Дата</th>
-                  <th>Сумма</th>
-                  <th>Товаров</th>
+                  <td style="color: #EAEAEA;">{{ p.purchase_date|date:"d.m.Y H:i" }}</td>
+                  <td style="color: #F5C518;">{{ p.total_amount }} ₽</td>
+                  <td style="color: #EAEAEA;">{{ p.items_data|length }}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {% for p in purchases %}
-                <tr>
-                  <td>{{ p.purchase_date|date:"d.m.Y H:i" }}</td>
-                  <td>{{ p.total_amount }} ₽</td>
-                  <td>{{ p.items_data|length }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% else %}
-          <p>Пока нет истории покупок.</p>
-        {% endif %}
-      </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-secondary">Пока нет истории покупок.</p>
+      {% endif %}
     </div>
   </div>
 </div>
-<a href="{% url 'manager_dashboard' %}" class="btn btn-secondary mt-3">Назад к списку</a>
+<a href="{% url 'manager_dashboard' %}" class="btn btn-outline-primary mt-3">← Назад к списку</a>
 {% endblock %}

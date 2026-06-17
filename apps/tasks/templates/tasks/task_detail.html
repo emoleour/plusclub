@@ -2,40 +2,29 @@
 {% block title %}Выполнение задания — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>{{ task.title }}</h2>
-<p class="text-muted">Награда: <span class="text-warning">{{ task.reward_coins }} коинов</span></p>
-<hr class="border-warning">
-
 <div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-body">
-        <h5>Описание задания</h5>
-        <p>{{ task.description }}</p>
-        <p class="small">Срок выполнения: {{ task.deadline|date:"d.m.Y H:i" }}</p>
-      </div>
-    </div>
+  <div class="col-lg-6">
+    <div class="card p-4">
+      <h4 class="text-warning mb-3">{{ task.title }}</h4>
+      <p style="color: #EAEAEA;">{{ task.description }}</p>
+      <p class="text-secondary small">Награда: <span class="text-warning fw-bold">{{ task.reward_coins }} коинов</span></p>
+      <p class="text-secondary small">Срок: {{ task.deadline|date:"d.m.Y H:i" }}</p>
+      <hr style="border-color: rgba(245,197,24,0.2);">
 
-    <div class="card mt-4">
-      <div class="card-header">Отправить выполнение</div>
-      <div class="card-body">
-        <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-
-          <div class="mb-3">
-            <label for="photo" class="form-label">Фотоотчёт *</label>
-            <input type="file" name="photo" id="photo" class="form-control" required accept="image/*">
-            <div class="form-text">Загрузите фотографию, подтверждающую выполнение задания.</div>
-          </div>
-
-          <div class="mb-3">
-            <label for="comment" class="form-label">Комментарий (необязательно)</label>
-            <textarea name="comment" id="comment" rows="3" class="form-control" placeholder="Ваш комментарий..."></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100">Отправить на проверку</button>
-        </form>
-      </div>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="photo" class="form-label" style="color: #EAEAEA;">Фотоотчёт</label>
+          <input type="file" name="photo" id="photo" class="form-control" required accept="image/*"
+                 style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;">
+        </div>
+        <div class="mb-3">
+          <label for="comment" class="form-label" style="color: #EAEAEA;">Комментарий</label>
+          <textarea name="comment" id="comment" rows="3" class="form-control" placeholder="Ваш комментарий..."
+                    style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Отправить на проверку</button>
+      </form>
     </div>
   </div>
 </div>

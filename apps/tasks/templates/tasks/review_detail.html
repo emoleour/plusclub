@@ -2,68 +2,47 @@
 {% block title %}Просмотр отклика #{{ submission.id }} — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>Отклик #{{ submission.id }}</h2>
-<hr class="border-warning">
-
 <div class="row">
-  <div class="col-md-6">
-    <div class="card mb-3">
-      <div class="card-header">Информация</div>
-      <div class="card-body">
-        <p><strong>Задание:</strong> {{ submission.task.title }}</p>
-        <p><strong>Пользователь:</strong> {{ submission.user.email }}</p>
-        <p><strong>Дата выполнения:</strong> {{ submission.created_at|date:"d.m.Y H:i" }}</p>
-        <p><strong>Статус:</strong>
-          {% if submission.status == 'pending' %}
-            <span class="badge bg-warning text-dark">На проверке</span>
-          {% elif submission.status == 'approved' %}
-            <span class="badge bg-success">Одобрено</span>
-          {% else %}
-            <span class="badge bg-danger">Отклонено</span>
-          {% endif %}
-        </p>
-        {% if submission.reviewed_by %}
-          <p><strong>Проверил:</strong> {{ submission.reviewed_by.email }} ({{ submission.reviewed_at|date:"d.m.Y H:i" }})</p>
+  <div class="col-lg-6 mb-4">
+    <div class="card p-4">
+      <h5 class="text-warning mb-3">Информация</h5>
+      <p style="color: #EAEAEA;"><strong>Задание:</strong> {{ submission.task.title }}</p>
+      <p style="color: #EAEAEA;"><strong>Пользователь:</strong> {{ submission.user.email }}</p>
+      <p style="color: #EAEAEA;"><strong>Дата:</strong> {{ submission.created_at|date:"d.m.Y H:i" }}</p>
+      <p style="color: #EAEAEA;"><strong>Статус:</strong>
+        {% if submission.status == 'pending' %}
+          <span class="badge bg-warning text-dark">На проверке</span>
+        {% elif submission.status == 'approved' %}
+          <span class="badge bg-success">Одобрено</span>
+        {% else %}
+          <span class="badge bg-danger">Отклонено</span>
         {% endif %}
-        <p><strong>Награда:</strong> {{ submission.task.reward_coins }} коинов</p>
-      </div>
-    </div>
-
-    {% if submission.status == 'pending' %}
-    <div class="card">
-      <div class="card-header">Действия</div>
-      <div class="card-body">
+      </p>
+      {% if submission.status == 'pending' %}
+        <hr style="border-color: rgba(245,197,24,0.2);">
         <form method="post">
           {% csrf_token %}
           <button type="submit" name="action" value="approve" class="btn btn-success w-100 mb-2">Одобрить и начислить коины</button>
           <button type="submit" name="action" value="reject" class="btn btn-danger w-100">Отклонить</button>
         </form>
-      </div>
+      {% endif %}
     </div>
-    {% endif %}
   </div>
-
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">Фотоотчёт</div>
-      <div class="card-body text-center">
-        {% if submission.photo %}
-          <img src="{{ submission.photo.url }}" class="img-fluid rounded" alt="Фото выполнения">
-        {% else %}
-          <p class="text-muted">Фото не загружено.</p>
-        {% endif %}
-      </div>
+  <div class="col-lg-6">
+    <div class="card p-4">
+      <h5 class="text-warning mb-3">Фотоотчёт</h5>
+      {% if submission.photo %}
+        <img src="{{ submission.photo.url }}" class="img-fluid rounded" alt="Фото">
+      {% else %}
+        <p class="text-secondary">Нет фото.</p>
+      {% endif %}
+      {% if submission.comment %}
+        <hr style="border-color: rgba(245,197,24,0.2);">
+        <h6 class="text-warning">Комментарий</h6>
+        <p style="color: #EAEAEA;">{{ submission.comment }}</p>
+      {% endif %}
     </div>
-    {% if submission.comment %}
-    <div class="card mt-3">
-      <div class="card-header">Комментарий пользователя</div>
-      <div class="card-body">
-        <p>{{ submission.comment }}</p>
-      </div>
-    </div>
-    {% endif %}
   </div>
 </div>
-
-<a href="{% url 'review_list' %}" class="btn btn-secondary mt-3">Назад к списку</a>
+<a href="{% url 'review_list' %}" class="btn btn-outline-primary mt-3">← Назад к списку</a>
 {% endblock %}

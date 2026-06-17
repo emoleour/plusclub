@@ -2,21 +2,25 @@
 {% block title %}Уведомления — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>Уведомления</h2>
-<hr class="border-warning">
+<h2 class="mb-4" style="color: #F5C518;">Уведомления</h2>
 {% if notifications %}
   <div class="list-group">
     {% for notification in notifications %}
-      <a href="{{ notification.link|default:'#' }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if not notification.is_read %}list-group-item-warning{% endif %}">
+      <a href="{{ notification.link|default:'#' }}"
+         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-2
+                {% if not notification.is_read %}list-group-item-warning{% endif %}"
+         style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2); border-radius: 12px; color: #EAEAEA;">
         <div>
-          <h6 class="mb-1">{{ notification.title }}</h6>
-          <small class="text-muted">{{ notification.message }}</small>
+          <h6 class="mb-1" style="color: #FFFFFF;">{{ notification.title }}</h6>
+          <small style="color: #A0A0A0;">{{ notification.message }}</small>
         </div>
-        <small>{{ notification.created_at|date:"d.m.Y H:i" }}</small>
+        <small style="color: #A0A0A0;">{{ notification.created_at|date:"d.m.Y H:i" }}</small>
       </a>
     {% endfor %}
   </div>
 {% else %}
-  <p class="text-muted">У вас нет уведомлений.</p>
+  <div class="alert alert-info" style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2); color: #FFFFFF;">
+    У вас нет уведомлений.
+  </div>
 {% endif %}
 {% endblock %}

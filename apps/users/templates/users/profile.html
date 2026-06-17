@@ -1,195 +1,141 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Профиль — Плюс Клуб{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-12">
-    <h2>Личный кабинет</h2>
-    <p class="lead">Добро пожаловать, {{ user.first_name }}!</p>
-    <hr class="border-warning">
-  </div>
-</div>
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-md-10">
 
-<div class="row">
-  <!-- Общая информация (для всех) -->
-  <div class="col-md-4 mb-4">
-    <div class="card h-100">
-      <div class="card-header">Мои данные</div>
-      <div class="card-body">
-        <p><strong>ФИО:</strong> {{ user.last_name }} {{ user.first_name }} {{ user.patronymic|default:"" }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Телефон:</strong> {{ user.phone }}</p>
-        <p><strong>Роль:</strong> {{ user.get_role_display }}</p>
+    <!-- Приветствие и основные данные -->
+    <div class="card p-4 mb-4">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="logo-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 12l2.5 2.5L16 9"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="mb-0" style="font-size: 1.5rem;">{{ user.last_name }} {{ user.first_name }}</h2>
+          <p class="text-secondary mb-0">{{ user.email }}</p>
+        </div>
+      </div>
+      <hr style="border-color: rgba(245,197,24,0.2);">
+      <div class="row">
+        <div class="col-sm-6">
+          <p class="text-secondary mb-1">Телефон</p>
+          <p class="fw-semibold">{{ user.phone }}</p>
+        </div>
+        <div class="col-sm-6">
+          <p class="text-secondary mb-1">Роль</p>
+          <p class="fw-semibold">{{ user.get_role_display }}</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  {% if user.role == 'individual' %}
-    <div class="col-md-8">
-      <!-- Банковская дисконтная карта -->
-      <div class="card mb-4">
-        <div class="card-header">Дисконтная карта</div>
-        <div class="card-body text-center">
-          <div class="discount-card-wrapper">
-            <div class="discount-card-bank">
-              <div class="discount-card-bank-inner">
-                <!-- Чип -->
-                <div class="card-chip"></div>
-                <!-- Логотип -->
-                <div class="card-logo">ПЛЮС КЛУБ</div>
-                <!-- Номер карты -->
-                <div class="card-number">{{ card.card_number }}</div>
-                <!-- Нижний ряд: держатель и скидка -->
-                <div class="card-bottom-row">
-                  <div class="card-holder">
-                    Держатель карты
-                    <span>{{ user.last_name }} {{ user.first_name }}</span>
-                  </div>
-                  <div class="card-discount">{{ card.discount_level }}%</div>
-                </div>
-                <!-- Штрихкод -->
-                <div class="card-barcode">
-                  <img src="{% url 'barcode_image' %}" alt="Штрихкод">
-                </div>
-              </div>
+    {% if user.role == 'individual' %}
+    <!-- Дисконтная карта + прогресс-бар в одной карточке -->
+    <div class="card p-4 mb-4">
+      <h5 class="text-warning mb-3 text-center">Дисконтная карта</h5>
+      <div class="row align-items-center">
+        <!-- Сама карта (слева) -->
+        <div class="col-md-6 mb-3 mb-md-0 d-flex justify-content-center">
+          <div class="discount-card-bank-premium" style="max-width: 360px; width: 100%; aspect-ratio: 1.585/1; background: linear-gradient(135deg, #1a1a1a, #2a2a2a); border: 1px solid rgba(245, 197, 24, 0.5); border-radius: 14px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <!-- Чип (слева вверху) -->
+            <div style="position: absolute; top: 12px; left: 12px; width: 40px; height: 30px; background: linear-gradient(135deg, #D4AF37, #FFDF00); border-radius: 5px;"></div>
+            <!-- Логотип (справа вверху) -->
+            <div style="position: absolute; top: 12px; right: 12px; font-weight: 700; font-size: 0.9rem; color: #F5C518; letter-spacing: 1px;">ПЛЮС КЛУБ</div>
+            <!-- Номер карты (по центру) -->
+            <div style="margin-top: auto; margin-bottom: 0.5rem; font-family: 'Courier New', monospace; font-size: clamp(1.2rem, 4vw, 1.6rem); letter-spacing: 3px; color: #F5C518; text-shadow: 0 0 8px rgba(245,197,24,0.5); text-align: center;">
+              {{ card.card_number }}
+            </div>
+            <!-- Имя и фамилия (под номером, по центру) -->
+            <div style="text-align: center; font-size: 1rem; font-weight: 500; color: #fff; letter-spacing: 0.5px; margin-bottom: 0.25rem;">
+              {{ user.last_name }} {{ user.first_name }}
+            </div>
+            <!-- Скидка (рядом с именем или отдельно) – поместим её справа внизу, но чтобы не мешала, оставим как прежде, но теперь только процент -->
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 0.25rem;">
+              <div class="badge bg-warning text-dark px-2 py-1" style="border-radius: 12px; font-size: 0.8rem;">{{ card.discount_level }}%</div>
+            </div>
+            <!-- Штрихкод (увеличенный, внизу) -->
+            <div style="text-align: center; margin-top: 0.25rem;">
+              <img src="{% url 'barcode_image' %}" alt="Штрихкод" style="height: 50px; width: 100%; object-fit: contain; filter: drop-shadow(0 0 4px rgba(245,197,24,0.5));">
             </div>
           </div>
+        </div>
 
-          <!-- Прогресс-бар с динамической анимацией -->
-          <div class="mt-4" style="max-width: 400px; margin-left: auto; margin-right: auto;">
-            <div class="progress" id="discount-progress-container">
-              <div class="progress-bar" id="discount-progress-bar"
-                  role="progressbar"
-                  style="width: 0%;"
-                  aria-valuenow="{{ progress_percent|floatformat:0 }}"
-                  aria-valuemin="0" aria-valuemax="100">
-                {{ progress_percent|floatformat:0 }}%
-              </div>
+        <!-- Прогресс-бар и информация (справа) -->
+        <div class="col-md-6">
+          <div class="px-2">
+            <div class="progress" style="height: 0.8rem;">
+              <div class="progress-bar" role="progressbar" style="width: {{ progress_percent }}%;" aria-valuenow="{{ progress_percent|floatformat:0 }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
-            <small class="text-light mt-2 d-block text-center">
+            <div class="d-flex justify-content-between mt-1">
+              <small class="text-secondary">Прогресс скидки</small>
+              <small class="text-warning fw-semibold">{{ progress_percent|floatformat:0 }}%</small>
+            </div>
+            <hr style="border-color: rgba(245,197,24,0.2);">
+            <p class="mb-1 text-secondary" style="font-size: 0.9rem;">
               {% if next_threshold %}
-                Накоплено {{ card.total_spent }} из {{ next_threshold }} ₽ для скидки {{ next_discount }}%
+                Накоплено <strong class="text-light">{{ card.total_spent }} ₽</strong> из {{ next_threshold }} ₽
               {% else %}
                 Максимальная скидка 10% достигнута!
               {% endif %}
-            </small>
+            </p>
+            {% if next_threshold %}
+              <p class="mb-0 text-secondary" style="font-size: 0.85rem;">
+                До скидки {{ next_discount }}% осталось {{ next_threshold|add:card.total_spent|floatformat:0 }} ₽
+              </p>
+            {% endif %}
           </div>
-
-          <!-- Скрипт анимации -->
-          <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            const bar = document.getElementById('discount-progress-bar');
-            if (bar) {
-              const targetPercent = bar.getAttribute('aria-valuenow');
-              if (targetPercent) {
-                // Запускаем анимацию через 50 мс после загрузки
-                setTimeout(() => {
-                  bar.style.width = targetPercent + '%';
-                }, 50);
-              }
-            }
-          });
-          </script>
-
-      <!-- Кошелёк -->
-      <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <span>Баланс Плюс Коинов</span>
-          <span class="badge bg-warning text-dark fs-6">{{ wallet.balance }} коинов</span>
-        </div>
-        <div class="card-body">
-          <a href="{% url 'coin_history' %}" class="btn btn-outline-primary btn-sm me-2">История операций</a>
-          <a href="{% url 'reward_list' %}" class="btn btn-primary btn-sm">Витрина вознаграждений</a>
-        </div>
-      </div>
-
-      <!-- Последние покупки -->
-      <div class="card">
-        <div class="card-header">Последние покупки</div>
-        <div class="card-body">
-          {% if purchases %}
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr><th>Дата</th><th>Сумма</th><th>Товаров</th></tr>
-                </thead>
-                <tbody>
-                  {% for p in purchases %}
-                    <tr>
-                      <td>{{ p.purchase_date|date:"d.m.Y H:i" }}</td>
-                      <td>{{ p.total_amount }} ₽</td>
-                      <td>{{ p.items_data|length }}</td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          {% else %}
-            <p>Пока нет истории покупок.</p>
-          {% endif %}
         </div>
       </div>
     </div>
 
-  {% elif user.role == 'installer' %}
-    <div class="col-md-8">
-      {% if manager_confirmed %}
-        <div class="card mb-4">
-          <div class="card-header">Ваши QR-коды</div>
-          <div class="card-body">
-            <p>Менеджер: <strong>{{ manager.email }}</strong></p>
-            <div class="qr-codes">
-              <div class="qr-item"><img src="https://via.placeholder.com/100" alt="QR 10%"><p class="mt-2">Скидка 10%</p></div>
-              <div class="qr-item"><img src="https://via.placeholder.com/100" alt="QR 5% + кешбэк"><p class="mt-2">Скидка 5% + кешбэк 5%</p></div>
-              <div class="qr-item"><img src="https://via.placeholder.com/100" alt="QR кешбэк 10%"><p class="mt-2">Кешбэк 10%</p></div>
-            </div>
-          </div>
-        </div>
-        <div class="card mb-4">
-          <div class="card-header">Контакты менеджера</div>
-          <div class="card-body">
-            <p><strong>Email:</strong> {{ manager.email }}</p>
-            <p><strong>Телефон:</strong> {{ manager.phone }}</p>
-            <p><strong>ФИО:</strong> {{ manager.last_name }} {{ manager.first_name }} {{ manager.patronymic|default:"" }}</p>
-          </div>
+    <!-- Кошелёк -->
+    <div class="card p-4 mb-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="text-warning mb-0">Плюс Коины</h5>
+        <span class="badge bg-warning text-dark fs-5 px-3 py-2">{{ wallet.balance }} коинов</span>
+      </div>
+      <hr style="border-color: rgba(245,197,24,0.2);">
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'coin_history' %}" class="btn btn-outline-primary">История операций</a>
+        <a href="{% url 'reward_list' %}" class="btn btn-primary">Витрина вознаграждений</a>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Последние покупки (общее для всех ролей) -->
+    <div class="card p-4">
+      <h5 class="text-warning mb-3">Последние покупки</h5>
+      {% if purchases %}
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Сумма</th>
+                <th>Товаров</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in purchases %}
+                <tr>
+                  <td>{{ p.purchase_date|date:"d.m.Y H:i" }}</td>
+                  <td>{{ p.total_amount }} ₽</td>
+                  <td>{{ p.items_data|length }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       {% else %}
-        <div class="alert alert-warning">
-          {% if relation %}Ваш аккаунт ещё не подтверждён менеджером. Ожидайте подтверждения.
-          {% else %}Вы ещё не выбрали менеджера. <a href="{% url 'select_manager' %}">Выбрать сейчас</a>{% endif %}
-        </div>
+        <p class="text-secondary">Пока нет истории покупок.</p>
       {% endif %}
-      <div class="card">
-        <div class="card-header">Баланс баллов</div>
-        <div class="card-body">
-          <h3 class="text-warning">120 баллов</h3>
-          <a href="#" class="btn btn-outline-primary btn-sm">История покупок</a>
-        </div>
-      </div>
     </div>
 
-  {% elif user.role == 'manager' %}
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">Управление монтажниками</div>
-        <div class="card-body">
-          <p>Вы можете просматривать и подтверждать монтажников.</p>
-          <a href="{% url 'manager_dashboard' %}" class="btn btn-primary">Перейти в панель управления</a>
-        </div>
-      </div>
-    </div>
-
-  {% elif user.role == 'admin' or user.role == 'superadmin' %}
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">Панель администратора</div>
-        <div class="card-body">
-          <p>Вы вошли как администратор.</p>
-          <a href="{% url 'admin_dashboard' %}" class="btn btn-primary">Перейти в панель управления</a>
-        </div>
-      </div>
-    </div>
-  {% endif %}
+  </div>
 </div>
 {% endblock %}
-

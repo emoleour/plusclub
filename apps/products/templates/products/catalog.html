@@ -2,30 +2,29 @@
 {% block title %}Каталог товаров — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>Каталог товаров</h2>
-<hr class="border-warning">
+<h2 class="mb-4" style="color: #F5C518;">Каталог товаров</h2>
 
 {% if products %}
-  <div class="row row-cols-1 row-cols-md-3 g-4">
+  <div class="row g-4">
     {% for product in products %}
-      <div class="col">
-        <div class="card h-100">
+      <div class="col-lg-4 col-md-6">
+        <div class="card p-4 h-100">
           {% if product.image %}
-            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            <img src="{{ product.image.url }}" class="card-img-top mb-3" alt="{{ product.name }}" style="border-radius: 12px; height: 200px; object-fit: cover;">
           {% endif %}
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text">{{ product.description|truncatewords:20 }}</p>
-            <div class="mt-auto">
-              <p class="fw-bold text-warning">{{ product.price }} ₽</p>
-              <p class="text-muted small">В наличии: {{ product.stock }} шт.</p>
-            </div>
+          <h5 style="color: #FFFFFF;">{{ product.name }}</h5>
+          <p class="text-secondary small">{{ product.description|truncatewords:20 }}</p>
+          <div class="mt-auto">
+            <p class="fw-bold text-warning mb-1">{{ product.price }} ₽</p>
+            <p class="text-secondary small mb-0">В наличии: {{ product.stock }} шт.</p>
           </div>
         </div>
       </div>
     {% endfor %}
   </div>
 {% else %}
-  <div class="alert alert-info">Товары пока не добавлены.</div>
+  <div class="alert alert-info" style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2); color: #FFFFFF;">
+    Товары пока не добавлены.
+  </div>
 {% endif %}
 {% endblock %}

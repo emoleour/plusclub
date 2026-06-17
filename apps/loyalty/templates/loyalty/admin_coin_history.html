@@ -2,12 +2,11 @@
 {% block title %}История операций с коинами (админ) — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>История операций с Плюс Коинами (все пользователи)</h2>
-<hr class="border-warning">
+<h2 class="text-warning mb-4">История операций с Плюс Коинами (все пользователи)</h2>
 
 {% if transactions %}
   <div class="table-responsive">
-    <table class="table table-hover" id="coin-history-admin-table">
+    <table class="table mb-0">
       <thead>
         <tr>
           <th>Дата</th>
@@ -20,25 +19,25 @@
       </thead>
       <tbody>
         {% for tx in transactions %}
-        <tr>
-          <td>{{ tx.created_at|date:"d.m.Y H:i" }}</td>
-          <td>{{ tx.wallet.user.email }}</td>
-          <td>
-            {% if tx.operation == 'earn' %}
-              <span class="badge bg-success">Начисление</span>
-            {% else %}
-              <span class="badge bg-danger">Списание</span>
-            {% endif %}
-          </td>
-          <td class="coin-amount">{{ tx.amount }} коинов</td>
-          <td>{{ tx.reason|default:"—" }}</td>
-          <td>{{ tx.created_by.email|default:"—" }}</td>
-        </tr>
+          <tr>
+            <td style="color: #EAEAEA;">{{ tx.created_at|date:"d.m.Y H:i" }}</td>
+            <td style="color: #FFFFFF; font-weight: 500;">{{ tx.wallet.user.email }}</td>
+            <td>
+              {% if tx.operation == 'earn' %}
+                <span class="badge bg-success">Начисление</span>
+              {% else %}
+                <span class="badge bg-danger">Списание</span>
+              {% endif %}
+            </td>
+            <td style="color: #F5C518;">{{ tx.amount }} коинов</td>
+            <td style="color: #A0A0A0;">{{ tx.reason|default:"—" }}</td>
+            <td style="color: #EAEAEA;">{{ tx.created_by.email|default:"—" }}</td>
+          </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 {% else %}
-  <div class="alert alert-info">Нет операций.</div>
+  <p class="text-secondary">Нет операций.</p>
 {% endif %}
 {% endblock %}

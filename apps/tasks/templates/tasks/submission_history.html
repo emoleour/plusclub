@@ -2,16 +2,15 @@
 {% block title %}Мои отклики — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>Мои отклики</h2>
-<hr class="border-warning">
+<h2 class="mb-4" style="color: #F5C518;">Мои отклики</h2>
 
 {% if submissions %}
   <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table mb-0">
       <thead>
         <tr>
           <th>Задание</th>
-          <th>Дата выполнения</th>
+          <th>Дата</th>
           <th>Статус</th>
           <th>Награда</th>
         </tr>
@@ -19,8 +18,8 @@
       <tbody>
         {% for sub in submissions %}
           <tr>
-            <td>{{ sub.task.title }}</td>
-            <td>{{ sub.created_at|date:"d.m.Y H:i" }}</td>
+            <td style="color: #FFFFFF;">{{ sub.task.title }}</td>
+            <td style="color: #EAEAEA;">{{ sub.created_at|date:"d.m.Y H:i" }}</td>
             <td>
               {% if sub.status == 'approved' %}
                 <span class="badge bg-success">Одобрено</span>
@@ -30,13 +29,15 @@
                 <span class="badge bg-warning text-dark">На проверке</span>
               {% endif %}
             </td>
-            <td>{{ sub.task.reward_coins }} коинов</td>
+            <td style="color: #F5C518;">{{ sub.task.reward_coins }} коинов</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 {% else %}
-  <div class="alert alert-info">Вы ещё не выполняли задания.</div>
+  <div class="alert alert-info" style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2); color: #FFFFFF;">
+    Вы ещё не выполняли задания.
+  </div>
 {% endif %}
 {% endblock %}

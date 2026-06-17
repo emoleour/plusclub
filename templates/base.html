@@ -1,46 +1,36 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ru" class="h-100">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Плюс Клуб{% endblock %}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Шрифт Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap (только для сетки и утилит) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Наш премиум-стиль -->
     <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+
     {% block extra_css %}{% endblock %}
 </head>
-<body class="d-flex flex-column h-100 bg-dark text-light">
-
-    <nav class="navbar navbar-expand-lg navbar-dark">
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand text-warning fw-bold" href="/">Плюс Клуб</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand" href="/">Плюс Клуб</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Профиль</a></li>
-
                         {% if user.role == 'individual' or user.role == 'installer' %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'task_list' %}">Задания</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'submission_history' %}">Мои отклики</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'monthly_rating' %}">Рейтинг</a></li>
                         {% endif %}
-
-                        {% if user.role == 'manager' %}
-                            <li class="nav-item"><a class="nav-link" href="{% url 'manager_dashboard' %}">Мои монтажники</a></li>
-                        {% endif %}
-
-                        {% if user.role == 'admin' or user.role == 'superadmin' %}
-                            <li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}">Админпанель</a></li>
-                        {% endif %}
-
-                        <li class="nav-item"><a class="nav-link" href="{% url 'product_catalog' %}">Товары</a></li>
-
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="{% url 'notification_list' %}">
                                 🔔
@@ -51,7 +41,6 @@
                                 {% endif %}
                             </a>
                         </li>
-
                         <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Выход</a></li>
                     {% else %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Вход</a></li>
@@ -62,31 +51,30 @@
         </div>
     </nav>
 
-    {% if messages %}
-    <div class="container mt-3">
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
+    <!-- Основной контент -->
     <main class="flex-shrink-0">
-        <div class="container mt-4">
+        <div class="container py-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
             {% block content %}{% endblock %}
         </div>
     </main>
 
-    <footer class="footer mt-auto py-3">
+    <!-- Футер -->
+    <footer class="footer mt-auto">
         <div class="container text-center">
-            <span class="text-muted">&copy; {% now "Y" %} Сибавтоматика+. Плюс Клуб.</span>
+            <span class="text-secondary">&copy; {% now "Y" %} Сибавтоматика+. Плюс Клуб.</span>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

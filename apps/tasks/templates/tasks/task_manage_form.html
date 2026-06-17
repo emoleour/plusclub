@@ -1,53 +1,16 @@
 {% extends 'base.html' %}
-{% block title %}{% if action == 'create' %}Новое задание{% else %}Редактирование задания{% endif %} — Плюс Клуб{% endblock %}
+{% block title %}{% if action == 'create' %}Новое задание{% else %}Редактировать задание{% endif %} — Плюс Клуб{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-md-8 col-lg-6">
-    <div class="card">
-      <div class="card-header">
-        <h4>{% if action == 'create' %}Добавить задание{% else %}Редактировать задание{% endif %}</h4>
-      </div>
-      <div class="card-body">
-        <form method="post" novalidate>
-          {% csrf_token %}
-
-          {% if form.non_field_errors %}
-            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
-          {% endif %}
-
-          <div class="mb-3">
-            <label for="{{ form.title.id_for_label }}" class="form-label">Название</label>
-            {{ form.title }}
-            {% if form.title.errors %}<div class="text-danger">{{ form.title.errors }}</div>{% endif %}
-          </div>
-
-          <div class="mb-3">
-            <label for="{{ form.description.id_for_label }}" class="form-label">Описание</label>
-            {{ form.description }}
-            {% if form.description.errors %}<div class="text-danger">{{ form.description.errors }}</div>{% endif %}
-          </div>
-
-          <div class="mb-3">
-            <label for="{{ form.reward_coins.id_for_label }}" class="form-label">Награда (коины)</label>
-            {{ form.reward_coins }}
-            {% if form.reward_coins.errors %}<div class="text-danger">{{ form.reward_coins.errors }}</div>{% endif %}
-          </div>
-
-          <div class="mb-3">
-            <label for="{{ form.deadline.id_for_label }}" class="form-label">Срок выполнения</label>
-            {{ form.deadline }}
-            {% if form.deadline.errors %}<div class="text-danger">{{ form.deadline.errors }}</div>{% endif %}
-          </div>
-
-          <div class="mb-3 form-check">
-            {{ form.is_active }}
-            <label class="form-check-label" for="{{ form.is_active.id_for_label }}">Активно</label>
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100">Сохранить</button>
-        </form>
-      </div>
+  <div class="col-lg-6">
+    <div class="card p-4">
+      <h4 class="text-warning mb-4 text-center">{% if action == 'create' %}Добавить задание{% else %}Редактировать задание{% endif %}</h4>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary w-100 mt-3">Сохранить</button>
+      </form>
     </div>
   </div>
 </div>

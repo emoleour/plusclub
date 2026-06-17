@@ -2,37 +2,34 @@
 {% block title %}Витрина вознаграждений — Плюс Клуб{% endblock %}
 
 {% block content %}
-<h2>Витрина вознаграждений</h2>
-<p class="lead">Обменивайте Плюс Коины на скидки, товары и мерч</p>
-<hr class="border-warning">
+<h2 class="mb-4" style="color: #F5C518;">Витрина вознаграждений</h2>
 
 {% if rewards %}
-  <div class="row row-cols-1 row-cols-md-3 g-4">
+  <div class="row g-4">
     {% for reward in rewards %}
-      <div class="col">
-        <div class="card h-100">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ reward.name }}</h5>
-            <p class="card-text">{{ reward.description }}</p>
-            <div class="mt-auto">
-              <p class="text-warning fw-bold">{{ reward.cost_in_coins }} коинов</p>
-              <form method="post" action="{% url 'redeem_reward' reward.id %}">
-                {% csrf_token %}
-                <button class="btn btn-primary w-100 {% if wallet.balance < reward.cost_in_coins %}disabled{% endif %}"
-                        {% if wallet.balance < reward.cost_in_coins %}aria-disabled="true"{% endif %}>
-                  Обменять
-                </button>
-              </form>
-              {% if wallet.balance < reward.cost_in_coins %}
-                <small class="text-danger">Недостаточно коинов</small>
-              {% endif %}
-            </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card p-4 h-100">
+          <h5 style="color: #FFFFFF;">{{ reward.name }}</h5>
+          <p class="text-secondary small">{{ reward.description }}</p>
+          <div class="mt-auto">
+            <p class="fw-bold text-warning mb-2">{{ reward.cost_in_coins }} коинов</p>
+            <form method="post" action="{% url 'redeem_reward' reward.id %}">
+              {% csrf_token %}
+              <button class="btn btn-primary w-100" {% if wallet.balance < reward.cost_in_coins %}disabled{% endif %}>
+                Обменять
+              </button>
+            </form>
+            {% if wallet.balance < reward.cost_in_coins %}
+              <small class="text-danger">Недостаточно коинов</small>
+            {% endif %}
           </div>
         </div>
       </div>
     {% endfor %}
   </div>
 {% else %}
-  <div class="alert alert-info">Пока нет доступных вознаграждений.</div>
+  <div class="alert alert-info" style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2); color: #FFFFFF;">
+    Пока нет доступных вознаграждений.
+  </div>
 {% endif %}
 {% endblock %}
