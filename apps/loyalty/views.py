@@ -129,7 +129,7 @@ def admin_coin_transfer_process(request):
         create_notification(
             user=wallet.user,
             title='Изменение баланса коинов',
-            message=f'Вам {action} {amount_int} коинов. Причина: {reason or 'не указана'}.',
+            message=f'Вам {action} {amount_int} коинов. Причина: {reason or "не указана"}.',
             link=reverse('profile')
         )
         messages.success(request, f'Пользователю {wallet.user.email} {action} {amount_int} коинов.')

@@ -247,7 +247,7 @@ class PasswordResetRequestView(APIView):
             return Response({'message': 'Если аккаунт существует, на почту отправлена инструкция'})
 
         token = signer.sign(user.email)
-        reset_url = f'{settings.BASE_URL or 'http://localhost:8000'}/api/v1/auth/password-reset/confirm/?token={token}'
+        reset_url = f'{settings.BASE_URL or "http://localhost:8000"}/api/v1/auth/password-reset/confirm/?token={token}'
         send_mail(
             subject='Сброс пароля в Плюс Клубе',
             message=f'Для сброса пароля перейдите по ссылке: {reset_url}',
