@@ -51,6 +51,19 @@ class CustomerInfoSerializer(serializers.ModelSerializer):
         model = User
         fields = ['email', 'first_name', 'last_name', 'phone', 'discount', 'coins', 'card_number']
 
+    def get_discount(self, obj):
+        if hasattr(obj, 'loyalty_card'):
+            return obj.loyalty_card.discount_level
+        return 0
+    def get_coins(self, obj):
+        if hasattr(obj, 'coin_wallet'):
+            return obj.coin_wallet.balance
+        return 0
+    def get_card_number(self, obj):
+        if hasattr(obj, 'loyalty_card'):
+            return obj.loyalty_card.card_number
+        return ''
+
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
