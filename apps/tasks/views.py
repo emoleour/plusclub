@@ -131,6 +131,13 @@ def task_manage_create(request):
         if form.is_valid():
             task = form.save(commit=False)
             task.created_by = request.user
+            task.save()
+            create_notification(
+                user=request.user,
+                title='Новое задание создано',
+                message=f'Задание "{task.title}" готово.',
+                link=reverse('task_manage_list')
+            )
             messages.success(request, 'Задание создано.')
             return redirect('task_manage_list')
     else:

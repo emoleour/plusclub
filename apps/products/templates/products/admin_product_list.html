@@ -9,24 +9,30 @@
 
 {% if products %}
   <div class="table-responsive">
-    <table class="table mb-0">
+    <table class="table mb-0" style="color: #EAEAEA !important; background: transparent !important;">
       <thead>
-        <tr>
-          <th>Название</th>
-          <th>Цена</th>
-          <th>Остаток</th>
-          <th>Активен</th>
-          <th>Действия</th>
+        <tr style="border-bottom: 2px solid #F5C518;">
+          <th style="color: #F5C518 !important; background: transparent !important;">Название</th>
+          <th style="color: #F5C518 !important; background: transparent !important;">Цена</th>
+          <th style="color: #F5C518 !important; background: transparent !important;">Остаток</th>
+          <th style="color: #F5C518 !important; background: transparent !important;">Активен</th>
+          <th style="color: #F5C518 !important; background: transparent !important;">Действия</th>
         </tr>
       </thead>
       <tbody>
         {% for product in products %}
-          <tr>
-            <td style="color: #FFFFFF;">{{ product.name }}</td>
-            <td style="color: #F5C518;">{{ product.price }} ₽</td>
-            <td style="color: #EAEAEA;">{{ product.stock }}</td>
-            <td>{% if product.is_active %}<span class="badge bg-success">Да</span>{% else %}<span class="badge bg-secondary">Нет</span>{% endif %}</td>
-            <td>
+          <tr style="background: rgba(255,255,255,0.03) !important; border-bottom: 1px solid #2A2A2A;">
+            <td style="color: #FFFFFF !important; background: transparent !important; padding: 12px 8px;">{{ product.name }}</td>
+            <td style="color: #F5C518 !important; background: transparent !important; padding: 12px 8px;">{{ product.price }} ₽</td>
+            <td style="color: #EAEAEA !important; background: transparent !important; padding: 12px 8px;">{{ product.stock }}</td>
+            <td style="background: transparent !important; padding: 12px 8px;">
+              {% if product.is_active %}
+                <span class="badge bg-success">Да</span>
+              {% else %}
+                <span class="badge bg-secondary">Нет</span>
+              {% endif %}
+            </td>
+            <td style="background: transparent !important; padding: 12px 8px;">
               <a href="{% url 'admin_product_update' product.pk %}" class="btn btn-sm btn-outline-primary">Ред.</a>
               <a href="{% url 'admin_product_delete' product.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
             </td>

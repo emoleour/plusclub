@@ -5,8 +5,9 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.decorators import action
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiExample
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiExample, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.views import SpectacularAPIView
 
 from django.shortcuts import get_object_or_404
 from django.conf import settings
@@ -23,13 +24,15 @@ from apps.users.models import User
 from apps.loyalty.models import CoinWallet, CoinTransaction, Reward
 from apps.tasks.models import Task, TaskSubmission
 from apps.promotions.models import Promotion
-from apps.notifications.models import Notification
+from apps.notifications.utils import create_notification
 from .serializers import (
     ProductSerializer,
     PurchaseSerializer,
     CustomTokenObtainPairSerializer,
     PurhcaseHistorySerializer,
-    PurchaseReturnSerializer)
+    PurchaseReturnSerializer,
+    CustomerInfoSerializer
+    )
 from . import serializers
 from .permissions import HasAPIAccess
 
@@ -43,11 +46,15 @@ class PurchaseCreateAPIView(generics.CreateAPIView):
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
 
-    def dispatch(self, request, *args, **kwargs):
-        api_key = request.headers.get('X-API-Key')
-        if api_key != settings.API_SECRET_KEY:
-            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
-        return super().dispatch(request, *args, **kwargs)
+    def perform_create(self, serializer):
+        purchase = serializer.save()
+        create_notification(
+            user=purchase.user,
+            title='Новая покупка',
+            message=f'Покупка на сумму: {purchase.total_amount} рублей зарегистирована.',
+            link=reverse('profile')
+        )
+
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [HasAPIAccess]
@@ -55,18 +62,16 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-    def dispatch(self, request, *args, **kwargs):
-        api_key = request.headers.get('X-API-Key')
-        if api_key != settings.API_SECRET_KEY:
-            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
-        return super().dispatch(request, *args, **kwargs)
 
 class CustomerInfoAPIView(APIView):
     permission_classes = [HasAPIAccess]
     authentication_classes = []
     renderer_classes = [JSONRenderer]
     @extend_schema(
-        request=CustomTokenObtainPairSerializer,
+        parameters=[
+            OpenApiParameter(name='email', description='Email клиента', required=False, type=OpenApiTypes.STR),
+            OpenApiParameter(name='email', description='Email клиента', required=False, type=OpenApiTypes.STR),
+        ],
         responses={200: OpenApiTypes.OBJECT},
     )
 
@@ -89,20 +94,14 @@ class CustomerInfoAPIView(APIView):
             except User.DoesNotExist:
                 return Response({'error': 'Пользователь не найден'}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = CustomerInfoAPIView(user)
+        serializer = CustomerInfoSerializer(user)
         return Response(serializer.data)
+
 
 class PurchaseListAPIView(generics.ListAPIView):
     permission_classes = [HasAPIAccess]
     renderer_classes = [JSONRenderer]
     serializer_class = PurchaseSerializer
-
-
-    def dispatch(self, request, *args, **kwargs):
-        api_key = request.headers.get('X-API-Key')
-        if api_key != settings.API_SECRET_KEY:
-            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
-        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         queryset = Purchase.objects.all()
@@ -127,17 +126,20 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = serializers.UserRegisterSerializer
 
+
 class ProfileView(generics.RetrieveAPIView):
     serializer_class = serializers.UserProfileSerializer
 
     def get_object(self):
         return self.request.user
 
+
 class CoinWalletView(generics.RetrieveAPIView):
     serializer_class = serializers. CoinWalletSerializer
 
     def get_object(self):
         return self.request.user.coin_wallet
+
 
 class CoinTransactionListView(generics.ListAPIView):
     serializer_class = serializers.CoinTransactionSerializer
@@ -149,6 +151,7 @@ class CoinTransactionListView(generics.ListAPIView):
 class RewardListView(generics.ListAPIView):
     queryset = Reward.objects.filter(is_active=True)
     serializer_class = serializers.RewardSerializer
+
 
 class RedeemRewardView(generics.GenericAPIView):
     serializer_class = serializers.RewardSerializer
@@ -191,6 +194,7 @@ class TaskViewSet(viewsets.ReadOnlyModelViewSet):
         )
         return Response(serializers.TaskSubmissionSerializer(submission).data, status=201)
 
+
 class TaskSubmissionListView(generics.ListAPIView):
     serializer_class = serializers.TaskSubmissionSerializer
 
@@ -202,11 +206,13 @@ class PromotionListView(generics.ListAPIView):
     queryset = Promotion.objects.filter(is_active=True)
     serializer_class = serializers.PromotionSerializer
 
+
 class ProductListView(generics.ListAPIView):
 
     queryset = Product.objects.filter(is_active=True)
     renderer_classes = [JSONRenderer]
     serializer_class = serializers.ProductSerializer
+
 
 class NotificationListView(generics.ListAPIView):
     serializer_class = serializers. NotificationSerializer
@@ -214,10 +220,12 @@ class NotificationListView(generics.ListAPIView):
     def get_queryset(self):
         return self.request.user.notifications.order_by('-created_at')
 
+
 class NotificationReadAllView(generics.GenericAPIView):
     def post(self, request):
         request.user.notifications.filter(is_read=False).update(is_read=True)
         return Response({'success': True})
+
 
 class ActivateAccountView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -254,6 +262,7 @@ class ActivateAccountView(APIView):
         """Активация по прямой ссылке (токен в URL)."""
         return self._activate_user(token)
 
+
 class PasswordResetRequestView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -276,6 +285,7 @@ class PasswordResetRequestView(APIView):
             fail_silently=True,
         )
         return Response({'message': 'Если аккаунт существует, на почту отправлена инструкция'})
+
 
 class PasswordResetConfirmView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -303,11 +313,9 @@ class PasswordResetConfirmView(APIView):
         return Response({'message': 'Пароль успешно изменен'})
 
 
-
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     @extend_schema(
-        request=CustomTokenObtainPairSerializer,
         responses={200: OpenApiTypes.OBJECT},
     )
     def post(self, request, *args, **kwargs):
@@ -340,4 +348,13 @@ class PurchaseReturnAPIView(generics.CreateAPIView):
     serializer_class = PurchaseReturnSerializer
 
     def perform_create(self, serializer):
-        serializer.save()
+        purchase_return = serializer.save()
+        create_notification(
+            user=purchase_return.purchase.user,
+            title='Возврат покупки',
+            message=f'Оформлен возврат на сумму {purchase_return.return_amount} рублей',
+            link=reverse('profile')
+        )
+
+class CustomSpectacularAPIView(SpectacularAPIView):
+    renderer_classes = [JSONRenderer]

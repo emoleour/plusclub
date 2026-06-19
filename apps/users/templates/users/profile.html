@@ -54,7 +54,7 @@
             <div style="text-align: center; font-size: 1rem; font-weight: 500; color: #fff; letter-spacing: 0.5px; margin-bottom: 0.25rem;">
               {{ user.last_name }} {{ user.first_name }}
             </div>
-            <!-- Скидка (рядом с именем или отдельно) – поместим её справа внизу, но чтобы не мешала, оставим как прежде, но теперь только процент -->
+            <!-- Скидка -->
             <div style="display: flex; justify-content: flex-end; margin-bottom: 0.25rem;">
               <div class="badge bg-warning text-dark px-2 py-1" style="border-radius: 12px; font-size: 0.8rem;">{{ card.discount_level }}%</div>
             </div>
@@ -68,8 +68,13 @@
         <!-- Прогресс-бар и информация (справа) -->
         <div class="col-md-6">
           <div class="px-2">
-            <div class="progress" style="height: 0.8rem;">
-              <div class="progress-bar" role="progressbar" style="width: {{ progress_percent }}%;" aria-valuenow="{{ progress_percent|floatformat:0 }}" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress" style="height: 0.8rem; background: rgba(255,255,255,0.1);">
+              <div id="discount-progress-bar" class="progress-bar" role="progressbar"
+                   style="width: 0%; background: linear-gradient(90deg, #D4AF37, #FFDF00);"
+                   aria-valuenow="{{ progress_percent|floatformat:0 }}"
+                   aria-valuemin="0" aria-valuemax="100">
+                {{ progress_percent|floatformat:0 }}%
+              </div>
             </div>
             <div class="d-flex justify-content-between mt-1">
               <small class="text-secondary">Прогресс скидки</small>
@@ -105,6 +110,13 @@
         <a href="{% url 'reward_list' %}" class="btn btn-primary">Витрина вознаграждений</a>
       </div>
     </div>
+
+    <!-- Быстрый переход к акциям -->
+    <div class="card p-4 mb-4">
+      <h5 class="text-warning mb-3">Акции</h5>
+      <p class="text-secondary">Специальные предложения и скидки.</p>
+      <a href="{% url 'user_promotion_list' %}" class="btn btn-outline-primary">Смотреть акции</a>
+    </div>
     {% endif %}
 
     <!-- Последние покупки (общее для всех ролей) -->
@@ -112,20 +124,24 @@
       <h5 class="text-warning mb-3">Последние покупки</h5>
       {% if purchases %}
         <div class="table-responsive">
-          <table class="table mb-0">
+          <table class="table mb-0" style="color: #EAEAEA !important; background: transparent !important;">
             <thead>
-              <tr>
-                <th>Дата</th>
-                <th>Сумма</th>
-                <th>Товаров</th>
+              <tr style="border-bottom: 2px solid #F5C518;">
+                <th style="color: #F5C518 !important; background: transparent !important;">Дата</th>
+                <th style="color: #F5C518 !important; background: transparent !important;">Сумма</th>
+                <th style="color: #F5C518 !important; background: transparent !important;">Товаров</th>
               </tr>
             </thead>
             <tbody>
               {% for p in purchases %}
-                <tr>
-                  <td>{{ p.purchase_date|date:"d.m.Y H:i" }}</td>
-                  <td>{{ p.total_amount }} ₽</td>
-                  <td>{{ p.items_data|length }}</td>
+                <tr style="background: rgba(255,255,255,0.03) !important; border-bottom: 1px solid #2A2A2A;">
+                  <td style="color: #FFFFFF !important; background: transparent !important; padding: 12px 8px;">
+                    <a href="{% url 'purchase_detail' p.id %}" style="color: #FFFFFF; text-decoration: underline;">
+                      {{ p.purchase_date|date:"d.m.Y H:i" }}
+                    </a>
+                  </td>
+                  <td style="color: #EAEAEA !important; background: transparent !important; padding: 12px 8px;">{{ p.total_amount }} ₽</td>
+                  <td style="color: #EAEAEA !important; background: transparent !important; padding: 12px 8px;">{{ p.items_data|length }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -138,4 +154,21 @@
 
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Скрипт анимации прогресс-бара -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const bar = document.getElementById('discount-progress-bar');
+  if (bar) {
+    const targetPercent = bar.getAttribute('aria-valuenow');
+    if (targetPercent) {
+      setTimeout(() => {
+        bar.style.width = targetPercent + '%';
+      }, 100);
+    }
+  }
+});
+</script>
 {% endblock %}

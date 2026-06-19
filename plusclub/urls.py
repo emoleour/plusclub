@@ -17,11 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from apps.users.views import home_redirect
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from drf_spectacular.views import SpectacularSwaggerView
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
-from apps.api.views import CustomTokenObtainPairView
+from apps.api.views import CustomTokenObtainPairView, CustomSpectacularAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,7 +37,7 @@ urlpatterns = [
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/', include('apps.api.urls')),
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/', CustomSpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 

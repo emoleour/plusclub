@@ -20,10 +20,22 @@ signer = TimestampSigner()
 
 class PurchaseSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(write_only=True)
+    receipt = serializers.FileField(required=False, allow_null=True)
 
     class Meta:
         model = Purchase
-        fields = ['id', 'user_email', 'purchase_date', 'total_amount', 'external_id', 'items_data']
+        fields = ['id', 'user_email', 'purchase_date', 'total_amount', 'external_id', 'items_data', 'receipt']
+
+    def validate_items_data(self, value):
+        if not isinstance(value, list):
+            raise serializers.ValidationError('items_data должен быть списком (массивом)')
+
+        for item in value:
+            if not isinstance(item, dict):
+                raise serializers.ValidationError('Каждый товар должен быть словарем')
+            if 'name' not in item:
+                raise serializers.ValidationError('У товара должно быть поле name')
+        return value
 
     def create(self, validated_data):
         email = validated_data.pop('user_email')
@@ -43,9 +55,9 @@ class PurchaseSerializer(serializers.ModelSerializer):
 
 
 class CustomerInfoSerializer(serializers.ModelSerializer):
-    discount = serializers.IntegerField(source='loyalty_card.discout_level', default=0)
-    coins = serializers.IntegerField(source='coin_wallet.balance', default=0)
-    card_number = serializers.CharField(source='loyalty_card.card_number', default='')
+    discount = serializers.SerializerMethodField()
+    coins = serializers.SerializerMethodField()
+    card_number = serializers.SerializerMethodField()
 
     class Meta:
         model = User

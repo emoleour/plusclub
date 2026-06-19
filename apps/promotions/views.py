@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
+from django.urls import reverse
 
+
+from apps.notifications.utils import create_notification
 from .models import Promotion
 from .forms import PromotionForm
 
@@ -24,6 +27,12 @@ def admin_promotion_create(request):
             promotion = form.save(commit=False)
             promotion.created_by = request.user
             promotion.save()
+            create_notification(
+                user=request.user,
+                title='Новая акция создана',
+                message=f'Акция "{promotion.title}" успешно создана.',
+                link=reverse('admin_promotion_list')
+            )
             messages.success(request, 'Акция создана')
             return redirect('admin_promotion_list')
     else:

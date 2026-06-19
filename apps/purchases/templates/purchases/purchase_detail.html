@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Детали покупки — Плюс Клуб{% endblock %}
+
+{% block content %}
+<h2 class="text-warning mb-4">Детали покупки</h2>
+
+<div class="card p-4 mb-4" style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2);">
+  <h5 class="text-warning mb-3">Основная информация</h5>
+  <div class="row">
+    <div class="col-sm-6">
+      <p class="text-secondary mb-1" style="color: #A0A0A0 !important;">Дата</p>
+      <p class="fw-semibold" style="color: #FFFFFF !important;">{{ purchase.purchase_date|date:"d.m.Y H:i" }}</p>
+    </div>
+    <div class="col-sm-6">
+      <p class="text-secondary mb-1" style="color: #A0A0A0 !important;">Сумма</p>
+      <p class="fw-semibold" style="color: #F5C518 !important;">{{ purchase.total_amount }} ₽</p>
+    </div>
+  </div>
+  {% if purchase.external_id %}
+    <p class="mt-2"><strong style="color: #A0A0A0;">Внешний ID:</strong> <span style="color: #FFFFFF;">{{ purchase.external_id }}</span></p>
+  {% endif %}
+</div>
+
+<div class="card p-4 mb-4" style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2);">
+  <h5 class="text-warning mb-3">Список товаров</h5>
+  {% if purchase.items_data %}
+    <div class="table-responsive">
+      <table class="table mb-0" style="color: #EAEAEA !important; background: transparent !important;">
+        <thead>
+          <tr style="border-bottom: 2px solid #F5C518;">
+            <th style="color: #F5C518 !important; background: transparent !important;">Наименование</th>
+            <th style="color: #F5C518 !important; background: transparent !important;">Количество</th>
+            <th style="color: #F5C518 !important; background: transparent !important;">Цена</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in purchase.items_data %}
+            <tr style="background: rgba(255,255,255,0.03) !important; border-bottom: 1px solid #2A2A2A;">
+              <td style="color: #FFFFFF !important; background: transparent !important; padding: 12px 8px;">{{ item.name }}</td>
+              <td style="color: #EAEAEA !important; background: transparent !important; padding: 12px 8px;">{{ item.qty }}</td>
+              <td style="color: #EAEAEA !important; background: transparent !important; padding: 12px 8px;">{{ item.price }} ₽</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p style="color: #A0A0A0;">Нет данных о товарах.</p>
+  {% endif %}
+</div>
+
+{% if purchase.receipt %}
+<div class="card p-4" style="background: #1E1E1E; border: 1px solid rgba(245,197,24,0.2);">
+  <h5 class="text-warning mb-3">Электронный чек</h5>
+  <a href="{{ purchase.receipt.url }}" target="_blank" class="btn btn-outline-primary">
+    Открыть чек
+  </a>
+</div>
+{% endif %}
+
+<a href="{% url 'profile' %}" class="btn btn-outline-primary mt-3">← Назад в профиль</a>
+{% endblock %}

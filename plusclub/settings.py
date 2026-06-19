@@ -88,8 +88,10 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Плюс Клуб API',
-    'DESCRIPTION': 'API для мобильного приложения системы лояльности',
-    'VERSION': '1.0.0',
+    'DESCRIPTION': 'API системы PLUSCLUB',
+    'VERSION': '1.0.1',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': r'/api/v[0-9]',
     'APPEND_COMPONENTS': {
         'securitySchemes': {
             'apiKey': {
@@ -188,6 +190,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

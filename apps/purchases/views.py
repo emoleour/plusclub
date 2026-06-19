@@ -3,7 +3,7 @@ import io
 import json
 from datetime import datetime
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 
@@ -99,4 +99,8 @@ def import_csv(request):
     return render(request, 'purchases/import_csv.html', {'form': form})
 
 
-# Create your views here.
+@login_required
+def purchase_detail(request, pk):
+    purchase = get_object_or_404(Purchase, pk=pk, user=request.user)
+    return render(request, 'purchases/purchase_detail.html', {'purchase': purchase})
+

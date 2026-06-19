@@ -27,6 +27,12 @@ class Purchase(models.Model):
         verbose_name='Список товаров'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    receipt = models.FileField(
+        upload_to='receipts/%Y/%m/',
+        null=True,
+        blank=True,
+        verbose_name='Электронный чек'
+    )
 
     class Meta:
         verbose_name = 'Покупка'
