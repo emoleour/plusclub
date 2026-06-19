@@ -80,12 +80,35 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
 }
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Плюс Клуб API',
     'DESCRIPTION': 'API для мобильного приложения системы лояльности',
     'VERSION': '1.0.0',
+    'APPEND_COMPONENTS': {
+        'securitySchemes': {
+            'apiKey': {
+                'type': 'apiKey',
+                'in': 'header',
+                'name': 'X-API-KEY'
+            },
+            'headerAuth': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+                'description': 'JWT-токен для мобильного приложения',
+            },
+        }
+    },
+    'SECURITY': [
+        {'apiKey': []},
+        {'bearerAuth': []},
+    ],
 }
 
 AUTH_USER_MODEL = 'users.User'

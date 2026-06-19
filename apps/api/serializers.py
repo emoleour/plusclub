@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.conf import settings
 
 
-from apps.purchases.models import Purchase
+from apps.purchases.models import Purchase, PurchaseReturn
 from apps.products.models import Product
 from apps.users.models import User
 from apps.loyalty.models import LoyaltyCard, CoinWallet, CoinTransaction, Reward
@@ -32,11 +32,11 @@ class PurchaseSerializer(serializers.ModelSerializer):
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             raise serializers.ValidationError({'user_email': 'Пользователь не найден'})
-        purchase =Purchase.objects.create(user=user, **validated_data)
+        purchase = Purchase.objects.create(user=user, **validated_data)
 
         if hasattr(user, 'loyalty_card'):
             card = user.loyalty_card
-            card.total_spend += purchase.total_amount
+            card.total_spent += purchase.total_amount
             card.update_discount_level()
             card.save()
         return purchase
@@ -181,5 +181,32 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Переименовываем поле в 'email' для удобства клиентов
-        self.fields['email'] = self.fields.pop('username')
+
+        self.fields['email'] = serializers.EmailField(label='Email')
+        self.fields.pop('username', None)
+
+class PurhcaseHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Purchase
+        fields = ['id', 'purchase_date', 'total_amount', 'external_id', 'items_data']
+
+class PurchaseReturnSerializer(serializers.ModelSerializer):
+    external_id = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = PurchaseReturn
+        fields = ['external_id', 'return_amount', 'reason']
+
+    def validate_external_id(self, value):
+        try:
+            purchase = Purchase.objects.get(external_id=value)
+        except Purchase.DoesNotExist:
+            raise serializers.ValidationError('Покупка с таким external_id не найдена')
+
+        self.context['purchase'] = purchase
+        return value
+
+    def create(self, validated_data):
+        purchase = self.context['purchase']
+        validated_data.pop('external_id')
+        return PurchaseReturn.objects.create(purchase=purchase, **validated_data)
