@@ -49,7 +49,6 @@ class PurchaseSerializer(serializers.ModelSerializer):
         if hasattr(user, 'loyalty_card'):
             card = user.loyalty_card
             card.total_spent += purchase.total_amount
-            card.update_discount_level()
             card.save()
         return purchase
 

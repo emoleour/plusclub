@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.conf import settings
 from .models import LoyaltyCard, CoinWallet
@@ -17,3 +17,22 @@ def create_loyalty_entities(sender, instance, created, **kwargs):
         )
 
         CoinWallet.objects.create(user=instance)
+
+@receiver(post_save, sender=LoyaltyCard)
+def auto_update_discount(sender, instance, created, **kwargs):
+    """Автоматически пересчитывает скидку при изменении total_spent"""
+
+    if not created:
+        if hasattr(instance, '_old_total_spent'):
+            if instance.total_spent != instance._old_total_spent:
+                instance.update_discount_level()
+        else:
+            pass
+
+@receiver(pre_save, sender=LoyaltyCard)
+def store_old_total_spent(sender, instance, **kwargs):
+    if instance.pk:
+        old_instance = LoyaltyCard.objects.get(pk=instance.pk)
+        instance._old_total_spent = old_instance.total_spent
+    else:
+        instance._old_total_spent = 0

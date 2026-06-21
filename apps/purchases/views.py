@@ -86,7 +86,6 @@ def import_csv(request):
                     if hasattr(user, 'loyalty_card'):
                         card = user.loyalty_card
                         card.total_spent += amount
-                        card.update_discount_level()
                         card.save()
                         updated_cards.add(card)
                 messages.success(
@@ -103,4 +102,3 @@ def import_csv(request):
 def purchase_detail(request, pk):
     purchase = get_object_or_404(Purchase, pk=pk, user=request.user)
     return render(request, 'purchases/purchase_detail.html', {'purchase': purchase})
-
