@@ -112,9 +112,12 @@ def profile(request):
     if user.role == 'installer':
         if not hasattr(user, 'manager_relation'):
             return redirect('select_manager')
+        purchases = Purchase.objects.filter(user=user).order_by('-purchase_date')[:10]
+        context['purchases'] = purchases
         context['relation'] = user.manager_relation
         context['manager_confirmed'] = user.manager_relation.confirmed
         context['manager'] = user.manager_relation.manager
+
 
 
     elif user.role == 'manager':
@@ -155,6 +158,7 @@ def profile(request):
         })
         purchases = Purchase.objects.filter(user=user).order_by('-purchase_date')[:10]
         context['purchases'] = purchases
+
 
     return render(request, 'users/profile.html', context)
 
