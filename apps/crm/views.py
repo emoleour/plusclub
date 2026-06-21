@@ -85,7 +85,7 @@ def manager_confirm(request, pk):
         create_notification(
         user=relation.installer,
         title='Аккаунт подтвержден',
-        message=f'Менеджер {relation.manager.get_full_name()} подтвердил вашу регистрацию',
+        message=f'Менеджер {relation.manager.last_name} {relation.manager.first_name} подтвердил вашу регистрацию',
         link=reverse('profile')
     )
 
