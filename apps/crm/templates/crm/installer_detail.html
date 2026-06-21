@@ -23,20 +23,20 @@
       <h5 class="text-warning mb-3">История покупок</h5>
       {% if purchases %}
         <div class="table-responsive">
-          <table class="table mb-0">
+          <table class="table mb-0" style="color: #EAEAEA !important; background: transparent !important;">
             <thead>
-              <tr>
-                <th>Дата</th>
-                <th>Сумма</th>
-                <th>Товаров</th>
+              <tr style="border-bottom: 2px solid #F5C518;">
+                <th style="color: #F5C518 !important; background: transparent !important;">Дата</th>
+                <th style="color: #F5C518 !important; background: transparent !important;">Сумма</th>
+                <th style="color: #F5C518 !important; background: transparent !important;">Товаров</th>
               </tr>
             </thead>
             <tbody>
               {% for p in purchases %}
-                <tr>
-                  <td style="color: #EAEAEA;">{{ p.purchase_date|date:"d.m.Y H:i" }}</td>
-                  <td style="color: #F5C518;">{{ p.total_amount }} ₽</td>
-                  <td style="color: #EAEAEA;">{{ p.items_data|length }}</td>
+                <tr style="background: rgba(255,255,255,0.03) !important; border-bottom: 1px solid #2A2A2A;">
+                  <td style="color: #EAEAEA !important; background: transparent !important; padding: 12px 8px;">{{ p.purchase_date|date:"d.m.Y H:i" }}</td>
+                  <td style="color: #F5C518 !important; background: transparent !important; padding: 12px 8px;">{{ p.total_amount }} ₽</td>
+                  <td style="color: #EAEAEA !important; background: transparent !important; padding: 12px 8px;">{{ p.items_data|length }}</td>
                 </tr>
               {% endfor %}
             </tbody>

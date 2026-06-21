@@ -119,6 +119,87 @@
     </div>
     {% endif %}
 
+    {% if user.role == 'installer' %}
+      {% if manager_confirmed %}
+        <div class="card p-4 mb-4">
+          <h5 class="text-warning mb-3">Ваши QR-коды</h5>
+          <div class="row g-3">
+            <div class="col-12 col-md-4 text-center">
+              <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#qrModal" data-qr-type="1">
+                QR 10% скидка
+              </button>
+            </div>
+            <div class="col-12 col-md-4 text-center">
+              <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#qrModal" data-qr-type="2">
+                QR 5% + 5%
+              </button>
+            </div>
+            <div class="col-12 col-md-4 text-center">
+              <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#qrModal" data-qr-type="3">
+                QR 10% кешбэк
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Модальное окно для QR-кода -->
+        <div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background: #1E1E1E; border: 1px solid #F5C518;">
+              <div class="modal-header" style="border-bottom: 1px solid #F5C518;">
+                <h5 class="modal-title text-warning" id="qrModalLabel">Ваш QR-код</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body text-center">
+                <img id="qrImage" src="" alt="QR-код" class="img-fluid" style="max-height: 70vh; background: white; padding: 10px; border-radius: 12px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const qrModalElement = document.getElementById('qrModal');
+          const qrImage = document.getElementById('qrImage');
+
+          // Обработчики для кнопок
+          const buttons = document.querySelectorAll('[data-bs-target="#qrModal"]');
+          buttons.forEach(button => {
+            button.addEventListener('click', function() {
+              const type = this.getAttribute('data-qr-type');
+              if (type) {
+                const url = "{% url 'installer_qr_code' 0 %}".replace('0', type);
+                qrImage.src = url;
+              }
+            });
+          });
+
+          // Очищаем изображение при закрытии модального окна
+          if (qrModalElement) {
+            qrModalElement.addEventListener('hidden.bs.modal', function () {
+              qrImage.src = '';
+            });
+          }
+        });
+        </script>
+
+        <div class="card p-4 mb-4">
+          <h5 class="text-warning mb-3">Контакты менеджера</h5>
+          <p><strong>Email:</strong> {{ manager.email }}</p>
+          <p><strong>Телефон:</strong> {{ manager.phone }}</p>
+          <p><strong>ФИО:</strong> {{ manager.last_name }} {{ manager.first_name }} {{ manager.patronymic|default:"" }}</p>
+        </div>
+      {% else %}
+        <div class="alert alert-warning">
+          {% if relation %}
+            Ваш аккаунт ещё не подтверждён менеджером. Ожидайте подтверждения.
+          {% else %}
+            Вы ещё не выбрали менеджера. <a href="{% url 'select_manager' %}">Выбрать сейчас</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endif %}
+
     <!-- Последние покупки (общее для всех ролей) -->
     <div class="card p-4">
       <h5 class="text-warning mb-3">Последние покупки</h5>

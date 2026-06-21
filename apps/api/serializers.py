@@ -222,3 +222,7 @@ class PurchaseReturnSerializer(serializers.ModelSerializer):
         purchase = self.context['purchase']
         validated_data.pop('external_id')
         return PurchaseReturn.objects.create(purchase=purchase, **validated_data)
+
+class ApplyDiscountSerializer(serializers.Serializer):
+    installer_id = serializers.IntegerField()
+    type = serializers.IntegerField()

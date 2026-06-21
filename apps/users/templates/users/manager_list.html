@@ -9,24 +9,30 @@
 
 {% if managers %}
   <div class="table-responsive">
-    <table class="table mb-0">
+    <table class="table mb-0" style="color: #EAEAEA !important; background: transparent !important;">
       <thead>
-        <tr>
-          <th>ФИО</th>
-          <th>Email</th>
-          <th>Телефон</th>
-          <th>Активен</th>
-          <th>Действия</th>
+        <tr style="border-bottom: 2px solid #F5C518;">
+          <th style="color: #F5C518 !important; background: transparent !important;">ФИО</th>
+          <th style="color: #F5C518 !important; background: transparent !important;">Email</th>
+          <th style="color: #F5C518 !important; background: transparent !important;">Телефон</th>
+          <th style="color: #F5C518 !important; background: transparent !important;">Активен</th>
+          <th style="color: #F5C518 !important; background: transparent !important;">Действия</th>
         </tr>
       </thead>
       <tbody>
         {% for manager in managers %}
-          <tr>
-            <td style="color: #FFFFFF;">{{ manager.last_name }} {{ manager.first_name }} {{ manager.patronymic|default:"" }}</td>
-            <td style="color: #EAEAEA;">{{ manager.email }}</td>
-            <td style="color: #EAEAEA;">{{ manager.phone }}</td>
-            <td>{% if manager.is_active %}<span class="badge bg-success">Да</span>{% else %}<span class="badge bg-danger">Нет</span>{% endif %}</td>
-            <td>
+          <tr style="background: rgba(255,255,255,0.03) !important; border-bottom: 1px solid #2A2A2A;">
+            <td style="color: #FFFFFF !important; background: transparent !important; padding: 12px 8px;">{{ manager.last_name }} {{ manager.first_name }} {{ manager.patronymic|default:"" }}</td>
+            <td style="color: #EAEAEA !important; background: transparent !important; padding: 12px 8px;">{{ manager.email }}</td>
+            <td style="color: #EAEAEA !important; background: transparent !important; padding: 12px 8px;">{{ manager.phone }}</td>
+            <td style="background: transparent !important; padding: 12px 8px;">
+              {% if manager.is_active %}
+                <span class="badge bg-success">Да</span>
+              {% else %}
+                <span class="badge bg-danger">Нет</span>
+              {% endif %}
+            </td>
+            <td style="background: transparent !important; padding: 12px 8px;">
               <a href="{% url 'manager_update' manager.pk %}" class="btn btn-sm btn-outline-primary">Ред.</a>
               <a href="{% url 'manager_delete' manager.pk %}" class="btn btn-sm btn-outline-danger">Деактивировать</a>
             </td>
