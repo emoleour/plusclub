@@ -6,9 +6,11 @@ from django.shortcuts import render, redirect, get_list_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.urls import reverse
+from django.db.models import Q
 from .models import Reward, CoinWallet, CoinTransaction
 from apps.users.views import is_admin
 from apps.notifications.utils import create_notification
+from apps.loyalty.models import InstallerPoint
 
 @login_required
 def barcode_image(request):
@@ -146,6 +148,54 @@ def admin_coin_history(request):
     return render(request, 'loyalty/admin_coin_history.html', {'transactions': transactions})
 
 
+
+@login_required
+@user_passes_test(is_admin)
+def admin_installer_points_list(request):
+    points_list = InstallerPoint.objects.select_related('user').all().order_by('user__email')
+    query = request.GET.get('q')
+    if query:
+        points_list = points_list.filter(
+            Q(user__email__icontains=query) |
+            Q(user__first_name__icontains=query) |
+            Q(user__last_name__icontains=query)
+        )
+    return render(request, 'loyalty/admin_installer_points_list.html', {'points_list': points_list, 'query': query})
+
+@login_required
+@user_passes_test(is_admin)
+def admin_installer_points_transfer(request):
+    if request.method == 'POST':
+        points_id = request.POST.get('points_id')
+        amount = request.POST.get('amount')
+        operation = request.POST.get('operation')
+        reason = request.POST.get('reason', '')
+
+        if not points_id or not amount or not operation:
+            messages.error(request, 'Заполните все поля')
+            return redirect('admin_installer_points_list')
+
+        try:
+            points = InstallerPoint.objects.get(id=points_id)
+            amount = int(amount)
+            if amount <= 0:
+                raise ValueError
+        except (InstallerPoint.DoesNotExistm, ValueError):
+            messages.error(request, 'Некорректные данные')
+            return redirect('admin_installer_points_list')
+        if operation == 'spend' and points.balance < amount:
+            messages.error(request, 'Недостаточно баллов')
+            return redirect('admin_installer_points_list')
+        if operation == 'earn':
+            points.balance += amount
+        else:
+            points.balance -= amount
+        points.save()
+
+        action = 'начислено' if operation == 'earn' else 'списано'
+        messages.success(request, f'Монтажнику {points.user.email} {action} {amount} баллов. Причина {reason}.')
+        return redirect('admin_installer_points_list')
+    return redirect('admin_installer_points_list')
 
 
 # Create your views here.

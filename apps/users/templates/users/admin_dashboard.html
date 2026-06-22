@@ -61,6 +61,13 @@
       <a href="{% url 'import_csv' %}" class="btn btn-outline-primary btn-sm">Открыть</a>
     </div>
   </div>
+  <div class="col-lg-4 col-md-6">
+    <div class="card p-4 h-100">
+      <h5 class="text-warning mb-3">Баллы монтажников</h5>
+      <p class="text-secondary small">Управление баллами монтажников.</p>
+      <a href="{% url 'admin_installer_points_list' %}" class="btn btn-outline-primary btn-sm">Открыть</a>
+    </div>
+</div>
   <!-- Администраторы (только для суперадмина) -->
   {% if is_superadmin %}
   <div class="col-lg-4 col-md-6">

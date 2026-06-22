@@ -10,4 +10,6 @@ urlpatterns = [
     path('admin/coins/transfer/', views.admin_coin_transfer_form, name='admin_coin_transfer'),
     path('admin/coins/transfer/process/', views.admin_coin_transfer_process, name='admin_coin_transfer_process'),
     path('admin/coins/history/', views.admin_coin_history, name='admin_coin_history'),
+    path('admin/installer-points/', views.admin_installer_points_list, name='admin_installer_points_list'),
+    path('admin/installer-points/transfer/', views.admin_installer_points_transfer, name='admin_installer_points_transfer'),
 ]

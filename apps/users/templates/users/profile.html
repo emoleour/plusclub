@@ -7,6 +7,7 @@
 <div class="row justify-content-center">
   <div class="col-lg-8 col-md-10">
 
+    <!-- Приветствие и основные данные -->
     <div class="card p-4 mb-4">
       <div class="d-flex align-items-center gap-3 mb-3">
         <div class="logo-icon">
@@ -34,28 +35,37 @@
     </div>
 
     {% if user.role == 'individual' %}
+    <!-- Дисконтная карта + прогресс-бар в одной карточке -->
     <div class="card p-4 mb-4">
       <h5 class="text-warning mb-3 text-center">Дисконтная карта</h5>
       <div class="row align-items-center">
+        <!-- Сама карта (слева) -->
         <div class="col-md-6 mb-3 mb-md-0 d-flex justify-content-center">
           <div class="discount-card-bank-premium" style="max-width: 360px; width: 100%; aspect-ratio: 1.585/1; background: linear-gradient(135deg, #1a1a1a, #2a2a2a); border: 1px solid rgba(245, 197, 24, 0.5); border-radius: 14px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+            <!-- Чип (слева вверху) -->
             <div style="position: absolute; top: 12px; left: 12px; width: 40px; height: 30px; background: linear-gradient(135deg, #D4AF37, #FFDF00); border-radius: 5px;"></div>
+            <!-- Логотип (справа вверху) -->
             <div style="position: absolute; top: 12px; right: 12px; font-weight: 700; font-size: 0.9rem; color: #F5C518; letter-spacing: 1px;">ПЛЮС КЛУБ</div>
+            <!-- Номер карты (по центру) -->
             <div style="margin-top: auto; margin-bottom: 0.5rem; font-family: 'Courier New', monospace; font-size: clamp(1.2rem, 4vw, 1.6rem); letter-spacing: 3px; color: #F5C518; text-shadow: 0 0 8px rgba(245,197,24,0.5); text-align: center;">
               {{ card.card_number }}
             </div>
+            <!-- Имя и фамилия (под номером, по центру) -->
             <div style="text-align: center; font-size: 1rem; font-weight: 500; color: #fff; letter-spacing: 0.5px; margin-bottom: 0.25rem;">
               {{ user.last_name }} {{ user.first_name }}
             </div>
+            <!-- Скидка -->
             <div style="display: flex; justify-content: flex-end; margin-bottom: 0.25rem;">
               <div class="badge bg-warning text-dark px-2 py-1" style="border-radius: 12px; font-size: 0.8rem;">{{ card.discount_level }}%</div>
             </div>
+            <!-- Штрихкод (увеличенный, внизу) -->
             <div style="text-align: center; margin-top: 0.25rem;">
               <img src="{% url 'barcode_image' %}" alt="Штрихкод" style="height: 50px; width: 100%; object-fit: contain; filter: drop-shadow(0 0 4px rgba(245,197,24,0.5));">
             </div>
           </div>
         </div>
 
+        <!-- Прогресс-бар и информация (справа) -->
         <div class="col-md-6">
           <div class="px-2">
             <div class="progress" style="height: 0.8rem; background: rgba(255,255,255,0.1);">
@@ -88,6 +98,7 @@
       </div>
     </div>
 
+    <!-- Кошелёк -->
     <div class="card p-4 mb-4">
       <div class="d-flex justify-content-between align-items-center">
         <h5 class="text-warning mb-0">Плюс Коины</h5>
@@ -100,6 +111,7 @@
       </div>
     </div>
 
+    <!-- Быстрый переход к акциям -->
     <div class="card p-4 mb-4">
       <h5 class="text-warning mb-3">Акции</h5>
       <p class="text-secondary">Специальные предложения и скидки.</p>
@@ -109,28 +121,46 @@
 
     {% if user.role == 'installer' %}
       {% if manager_confirmed %}
+        <!-- Баланс баллов -->
+        <div class="card p-4 mb-4">
+          <h5 class="text-warning mb-3">Баланс баллов</h5>
+          <p class="fs-5 text-warning">
+            {% if user.installer_points %}
+              {{ user.installer_points.balance }} баллов
+            {% else %}
+              0 баллов
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- QR-коды -->
         <div class="card p-4 mb-4">
           <h5 class="text-warning mb-3">Ваши QR-коды</h5>
           <div class="row g-3">
-            <div class="col-12 col-md-4 text-center">
+            <div class="col-6 col-md-3 text-center">
               <button class="btn btn-outline-primary w-100" data-qr-type="1">
                 QR 10% скидка
               </button>
             </div>
-            <div class="col-12 col-md-4 text-center">
+            <div class="col-6 col-md-3 text-center">
               <button class="btn btn-outline-primary w-100" data-qr-type="2">
                 QR 5% + 5%
               </button>
             </div>
-            <div class="col-12 col-md-4 text-center">
+            <div class="col-6 col-md-3 text-center">
               <button class="btn btn-outline-primary w-100" data-qr-type="3">
                 QR 10% кешбэк
+              </button>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+              <button class="btn btn-outline-primary w-100" data-qr-type="4">
+                QR Списать баллы
               </button>
             </div>
           </div>
         </div>
 
-
+        <!-- Кастомное модальное окно для QR-кода -->
         <div id="customQrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
           <div style="background: #1E1E1E; border: 1px solid #F5C518; border-radius: 20px; padding: 20px; max-width: 90vw; max-height: 90vh; text-align: center; position: relative;">
             <button onclick="closeQrModal()" style="position: absolute; top: 10px; right: 10px; background: transparent; border: none; color: #F5C518; font-size: 1.5rem; cursor: pointer;">✕</button>
@@ -140,6 +170,7 @@
         </div>
 
         <script>
+        // Функции для управления кастомным модальным окном
         function openQrModal(type) {
           const url = "{% url 'installer_qr_code' 0 %}".replace('0', type);
           document.getElementById('qrImage').src = url;
@@ -147,17 +178,17 @@
         }
         function closeQrModal() {
           document.getElementById('customQrModal').style.display = 'none';
-          document.getElementById('qrImage').src = ''; // очищаем изображение
+          document.getElementById('qrImage').src = '';
         }
 
-
+        // Закрытие по клику на тёмный фон
         document.getElementById('customQrModal').addEventListener('click', function(e) {
           if (e.target === this) {
             closeQrModal();
           }
         });
 
-
+        // Привязываем кнопки к открытию
         document.addEventListener('DOMContentLoaded', function() {
           const buttons = document.querySelectorAll('[data-qr-type]');
           buttons.forEach(button => {
@@ -169,6 +200,7 @@
         });
         </script>
 
+        <!-- Контакты менеджера -->
         <div class="card p-4 mb-4">
           <h5 class="text-warning mb-3">Контакты менеджера</h5>
           <p><strong>Email:</strong> {{ manager.email }}</p>
@@ -186,7 +218,7 @@
       {% endif %}
     {% endif %}
 
-
+    <!-- Последние покупки (общее для всех ролей) -->
     <div class="card p-4">
       <h5 class="text-warning mb-3">Последние покупки</h5>
       {% if purchases %}
@@ -224,6 +256,7 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Скрипт анимации прогресс-бара -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const bar = document.getElementById('discount-progress-bar');

@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.conf import settings
-from .models import LoyaltyCard, CoinWallet
+from .models import LoyaltyCard, CoinWallet, InstallerPoint
 import random
 import string
 
@@ -36,3 +36,8 @@ def store_old_total_spent(sender, instance, **kwargs):
         instance._old_total_spent = old_instance.total_spent
     else:
         instance._old_total_spent = 0
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_installer_points(sender, instance, created, **kwargs):
+    if created and instance.role == 'installer':
+        InstallerPoint.objects.create(user=instance)

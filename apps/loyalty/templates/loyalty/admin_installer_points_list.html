@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Баллы монтажников — Плюс Клуб{% endblock %}
+
+{% block content %}
+<h2 class="text-warning mb-4">Баллы монтажников</h2>
+
+<!-- Поиск -->
+<form class="mb-4" method="get">
+  <div class="input-group">
+    <input type="text" name="q" class="form-control" placeholder="Поиск по email или имени" value="{{ query|default:'' }}"
+           style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;">
+    <button class="btn btn-primary" type="submit">Найти</button>
+  </div>
+</form>
+
+{% if points_list %}
+  <div class="table-responsive">
+    <table class="table mb-0" style="color: #EAEAEA !important; background: #1E1E1E !important; border-collapse: collapse;">
+      <thead>
+        <tr style="border-bottom: 2px solid #F5C518; background: transparent !important;">
+          <th style="color: #F5C518 !important; background: transparent !important; padding: 12px 8px;">Монтажник</th>
+          <th style="color: #F5C518 !important; background: transparent !important; padding: 12px 8px;">Баланс</th>
+          <th style="color: #F5C518 !important; background: transparent !important; padding: 12px 8px;">Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pts in points_list %}
+          <tr style="background: #2A2A2A !important; border-bottom: 1px solid #3A3A3A;">
+            <td style="color: #FFFFFF !important; background: transparent !important; padding: 12px 8px;">
+              {{ pts.user.email }} ({{ pts.user.last_name }} {{ pts.user.first_name }})
+            </td>
+            <td style="color: #F5C518 !important; font-weight: 500; background: transparent !important; padding: 12px 8px;">
+              {{ pts.balance }} баллов
+            </td>
+            <td style="background: transparent !important; padding: 12px 8px;">
+              <!-- Кнопка вызова кастомного модального окна -->
+              <button type="button" class="btn btn-sm btn-outline-primary" onclick="openPointsModal({{ pts.id }})">
+                Начислить / Списать
+              </button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="text-secondary">Нет данных о баллах монтажников.</p>
+{% endif %}
+
+<!-- Кастомное модальное окно -->
+<div id="pointsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
+  <div style="background: #1E1E1E; border: 1px solid #F5C518; border-radius: 20px; padding: 20px; max-width: 500px; width: 90%; text-align: left; position: relative;">
+    <button onclick="closePointsModal()" style="position: absolute; top: 10px; right: 10px; background: transparent; border: none; color: #F5C518; font-size: 1.5rem; cursor: pointer;">✕</button>
+    <h5 class="text-warning mb-3">Начислить или списать баллы</h5>
+    <form method="post" action="{% url 'admin_installer_points_transfer' %}" id="pointsForm">
+      {% csrf_token %}
+      <input type="hidden" name="points_id" id="modalPointsId">
+      <div class="mb-3">
+        <label class="form-label" style="color: #EAEAEA;">Тип операции</label>
+        <select name="operation" class="form-select" style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;">
+          <option value="earn">Начислить</option>
+          <option value="spend">Списать</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" style="color: #EAEAEA;">Сумма (баллов)</label>
+        <input type="number" name="amount" class="form-control" min="1" required
+               style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" style="color: #EAEAEA;">Причина</label>
+        <textarea name="reason" class="form-control" rows="2"
+                  style="background: #2B2B2B; border-color: #3A3A3A; color: #FFFFFF;"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Выполнить</button>
+    </form>
+  </div>
+</div>
+
+<script>
+// Функции управления кастомным модальным окном
+function openPointsModal(pointsId) {
+  document.getElementById('modalPointsId').value = pointsId;
+  document.getElementById('pointsModal').style.display = 'flex';
+}
+function closePointsModal() {
+  document.getElementById('pointsModal').style.display = 'none';
+}
+// Закрытие по клику на фон
+document.getElementById('pointsModal').addEventListener('click', function(e) {
+  if (e.target === this) closePointsModal();
+});
+</script>
+
+{% endblock %}

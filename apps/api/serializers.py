@@ -225,3 +225,4 @@ class PurchaseReturnSerializer(serializers.ModelSerializer):
 class ApplyDiscountSerializer(serializers.Serializer):
     installer_id = serializers.IntegerField()
     type = serializers.IntegerField()
+    total_amount = serializers.DecimalField(max_digits=10, decimal_places=2, required=False, default=0)

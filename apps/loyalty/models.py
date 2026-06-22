@@ -137,4 +137,19 @@ class Reward(models.Model):
         return f'{self.name} ({self.cost_in_coins} коинов)'
 
 
-# Create your models here.
+class InstallerPoint(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='installer_points',
+        verbose_name='Монтажник'
+    )
+    balance = models.PositiveIntegerField(default=0, verbose_name='Баланс баллов')
+
+    class Meta:
+        verbose_name = 'Баллы монтажника'
+        verbose_name_plural = 'Баллы монтажников'
+
+    def __str__(self):
+        return f'{self.user.email} - {self.balance} баллов'
+
